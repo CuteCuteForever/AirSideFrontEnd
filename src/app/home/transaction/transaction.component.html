@@ -1,0 +1,298 @@
+<div class="row">
+  <div class="col-md-12 center">
+    <div class="card">
+      <div class="card-header">
+        <strong>New Rental</strong>
+      </div>
+
+      <div class="card-body">
+        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+          <div class="card">
+            <div class="card-header">
+              <strong>Company Information</strong> Form
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Company</label>
+              <div class="col-md-9">
+                <input [(ngModel)] = "company.companyName" type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Customer's company Infromation</span>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Department</label>
+              <div class="col-md-9">
+                <input [(ngModel)] = "company.departmentInformation" type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Department's company Infromation</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Address</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Address's company Infromation</span>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Contact Person</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Contact Person's company Infromation</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Contact Number</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Contact Number's company Infromation</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <strong>Department</strong> Form
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Department</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Department's Billling Infromation</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Address</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Address's Billing Infromation</span>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Contact Person</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Contact Person's Billing Infromation</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Contact Number</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Contact Number's Billing Infromation</span>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Vehicle Registration No</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Call Sign</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+              </div>
+            </div>
+
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="date-input">Date</label>
+              <div class="col-md-9">
+                <input class="form-control" id="date-input" type="date" name="date-input" placeholder="date">
+                <span class="help-block">Please enter a valid date</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="textarea-input">Nature of work inside </label>
+              <div class="col-md-9">
+                <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control"
+                  placeholder="Content.."></textarea>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="select1">Type of AVP License</label>
+              <div class="col-md-9">
+                <select id="select1" name="select1" class="form-control">
+                  <option value="0">Please select</option>
+                  <option value="1">CAT 1 </option>
+                  <option value="2">TEMP</option>
+                  <option value="3">OTHERS</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <strong> Part A </strong>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Type of Renewal</label>
+              <div class="col-md-9 col-form-label">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="radios" id="radio1" value="option1" checked>
+                  <label class="form-check-label" for="radio1">
+                    New Rental
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="radios" id="radio2" value="option2">
+                  <label class="form-check-label" for="radio2">
+                    Renewal Of Rental
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="inline-radios">Duration of New Rental</label>
+              <div class="col-md-9 col-form-label">
+                <div class="form-check form-check-inline mr-1" id="inline-radios">
+                  <input class="form-check-input" type="radio" name="inline-radios" id="inlineRadio1" value="option1">
+                  <label class="form-check-label" for="inlineRadio1">Daily</label>
+                </div>
+                <div class="form-check form-check-inline mr-1">
+                  <input class="form-check-input" type="radio" name="inline-radios" id="inlineRadio2" value="option2">
+                  <label class="form-check-label" for="inlineRadio2">Weekly</label>
+                </div>
+                <div class="form-check form-check-inline mr-1">
+                  <input class="form-check-input" type="radio" name="inline-radios" id="inlineRadio3" value="option3">
+                  <label class="form-check-label" for="inlineRadio3">Monthly</label>
+                </div>
+                <div class="form-check form-check-inline mr-1">
+                  <input class="form-check-input" type="radio" name="inline-radios" id="inlineRadio3" value="option3">
+                  <label class="form-check-label" for="inlineRadio3">Yearly</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Checkboxes</label>
+              <div class="col-md-9 col-form-label">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="option1" id="checkbox1">
+                  <label class="form-check-label" for="checkbox1">
+                    Option 1
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="option1" id="checkbox2">
+                  <label class="form-check-label" for="checkbox2">
+                    Option 2
+                  </label>
+                </div>
+                <div class="form-check checkbox">
+                  <input class="form-check-input" type="checkbox" value="option1" id="checkbox3">
+                  <label class="form-check-label" for="checkbox3">
+                    Option 3
+                  </label>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="date-input">End Date of Existing Rental</label>
+              <div class="col-md-9">
+                <input class="form-control" id="date-input" type="date" name="date-input" placeholder="date">
+                <span class="help-block">Please enter a valid date</span>
+              </div>
+            </div>
+
+
+           
+           
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="file-input">File input</label>
+              <div class="col-md-9">
+                <input type="file" id="file-input" name="file-input">
+              </div>
+            </div>
+            
+          </div>
+      
+
+          <div class="card">
+            <div class="card-header">
+              <strong> Part B </strong>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Rental of ADS-B Vehicle Transponder</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Cost</span>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Registration</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Cost</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Validation of ADS-B Vehicle Transponder</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">Cost</span>
+              </div>
+            </div>
+            
+          </div>
+
+
+          <div class="card">
+            <div class="card-header">
+              <strong> Part C </strong>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="date-input">State Date of Transponder Rental</label>
+              <div class="col-md-9">
+                <input class="form-control" id="date-input" type="date" name="date-input" placeholder="date">
+                <span class="help-block">Please enter a valid date</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input">Work Order Reference No</label>
+              <div class="col-md-9">
+                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text">
+                <span class="help-block">For New Rental</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <strong> Signature </strong>
+              </div>
+           <signature-pad id= "signature-pad"> </signature-pad>
+
+          </div>
+
+      
+      <div class="card-footer">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit</button>
+        <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+        <button (click)="generatePDF()">Generate PDF</button> 
+      </div>
+    

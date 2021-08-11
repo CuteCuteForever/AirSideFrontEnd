@@ -1,0 +1,160 @@
+<div class="container pt-xl-5 pt-md-5 pt-5">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <h1>Add Transponder <span class="badge badge-secondary">New</span></h1>
+    </div>
+  </div>
+</div>
+
+<div class="container pt-xl-2 pt-md-2 pt-2">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <div class="alert alert-success"
+           *ngIf="isSuccessful && successMessage">
+        {{ successMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container pt-xl-2 pt-md-2 pt-2">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="isError && errorMessage"
+      >
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container pt-xl-2 pt-md-2 pt-2">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+        <div class="row">
+          <div class="col-sm-5">
+            <label>RFID Tag</label>
+          </div>
+          <div class="col-sm">
+            <button class="btn btn-primary"
+                    type="Button"
+                    [disabled]="!this.isRFIDConnectedNow"
+                    (click)="EPCButtonPress(f);">
+              {{ epcBtnValue }}
+            </button>
+          </div>
+        </div>
+
+        <div class="row pt-2">
+          <div class="col-sm-8 form-group">
+            <input
+              type="text"
+              id="epc"
+              class="form-control"
+              name="epc"
+              ngModel
+              required
+              disabled
+              [(ngModel)]="epcTxtBoxValue"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <label for="callSign">Call Sign</label>
+            <input
+              type="text"
+              id="callSign"
+              class="form-control"
+              name="callSign"
+              ngModel
+              required
+            >
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <label for="description">Description</label>
+            <input
+              type="text"
+              id="description"
+              class="form-control"
+              name="description"
+              ngModel
+              required
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+          <mat-form-field>
+            <input
+              matInput
+              id="warranty"
+              name="warranty"
+              [matDatepicker]="picker"
+              ngModel
+              placeholder="Warranty Date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <label for="serialNumber">Serial Number</label>
+            <input
+              type="text"
+              id="serialNumber"
+              class="form-control"
+              name="serialNumber"
+              ngModel
+              required
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <label for="availability">Service Availability</label>
+            <select class="form-control form-control-lg"
+                    id="availability"
+                    name="availability"
+                    [(ngModel)]="serviceAvailability"
+                    aria-label=".form-select-lg example"
+                    required
+            >
+              <option value="Available">Available</option>
+              <option value="Repair">Repair</option>
+              <option value="Rent Out">Rent Out</option>
+              <option value="Repair">Repair</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <button
+              class="btn btn-success"
+              type="submit"
+              [disabled]="!f.valid">
+              Register Transponder </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+

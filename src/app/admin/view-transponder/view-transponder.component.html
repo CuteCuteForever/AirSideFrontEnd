@@ -1,0 +1,116 @@
+<div class="container pt-xl-5 pt-md-5 pt-5">
+  <div class="row justify-content-md-center center">
+    <h1>View Transponder ({{ size }})</h1>
+  </div>
+</div>
+
+
+<div class="container pt-xl-10 pt-md-5 pt-5">
+  <div class="row justify-content-md-center center">
+
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
+
+      <ng-container matColumnDef="transponderID">
+        <th class="header" *matHeaderCellDef > ID
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="idFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.transponderID}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="epc">
+        <th class="header" *matHeaderCellDef >
+          EPC
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="epcFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.epc}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="call_sign">
+        <th class="header" *matHeaderCellDef>
+          Call Sign
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="callSignFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.callSign}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="description">
+        <th class="header" *matHeaderCellDef >
+          Description
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="descriptionFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="row_record_status">
+        <th class="header" *matHeaderCellDef >
+          Row Record Status
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="rowRecordStatusFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.rowRecordStatus}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="serial_number">
+        <th class="header" *matHeaderCellDef >
+          Serial Number
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="serialNumberFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.serialNumber}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="timestamp">
+        <th class="header" *matHeaderCellDef >
+          Timestamp
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="timeStampFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="transponder_status">
+        <th class="header" *matHeaderCellDef >
+          Service Availability
+          <mat-form-field class="filter" floatLabel="never">
+            <mat-label>Search</mat-label>
+            <input matInput [formControl]="transponderStatusFilter">
+          </mat-form-field>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.transponderStatus}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+  </div>
+</div>
+
+

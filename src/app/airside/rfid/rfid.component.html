@@ -1,0 +1,169 @@
+<app-admin></app-admin>
+
+<div class="container pt-xl pt-md-5 pt-5">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs col-md col-md-offset-10">
+      <div class="row">
+        <h1 class="col-9">RFID Device Information</h1>
+        <div class="col-3" *ngIf="isLoading" >
+          <small-app-loading-spinner></small-app-loading-spinner>
+        </div>
+      </div>
+
+      <div class="container pt-xl pt-md-2 pt-3">
+        <div class="row">
+          <div class= "col">
+            <button
+              class="btn btn-primary"
+              type="Button"
+              (click)="openRFIDCardReader()"
+            > Connect Desktop Reader</button>
+          </div>
+          <div class= "col">
+            <button
+              class="btn btn-primary"
+              type="Button"
+              [disabled]="!isOpenRFIDReader"
+              (click)="closeRFIDCardReader()"
+            > Disconnect Reader </button>
+          </div>
+          <div class= "col">
+            <button
+              class="btn btn-primary"
+              type="Button"
+              (click)="clearFields(f)"
+            > Clear </button>
+          </div>
+          <div class="col">
+            <button
+              class="btn btn-primary"
+              type="Button"
+              (click)="getData()"
+              [disabled]="!isOpenRFIDReader"
+            > Get Data</button>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="row pt-5 col-xs col-md col-md-offset-10">
+        <div class="alert alert-success" *ngIf="isSuccessful && successMessage">
+          {{ successMessage }}
+        </div>
+      </div>
+      <div class="row pt-3 col-xs col-md col-md-offset-10">
+        <div class="alert alert-danger" *ngIf="!isSuccessful && errorMessage">
+          {{ errorMessage }}
+        </div>
+      </div>
+
+
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+        <div class="row pt-xl pt-md-4 pt-4">
+          <div class="col-sm form-group">
+            <label for="transport">Transport</label>
+            <input
+              type="text"
+              id="transport"
+              class="form-control"
+              name="transport"
+              ngModel
+              required
+              [(ngModel)]="transportValue"
+            >
+          </div>
+          <div class="col-sm form-group">
+            <label for="workMode">Work Mode</label>
+            <input
+              type="text"
+              id="workMode"
+              class="form-control"
+              name="workMode"
+              ngModel
+              required
+              [(ngModel)]="workModeValue"
+            >
+          </div>
+          <div class="col-sm form-group">
+            <label for="deviceAddress">Device Address</label>
+            <input
+              type="text"
+              id="deviceAddress"
+              class="form-control"
+              name="deviceAddress"
+              ngModel
+              required
+              [(ngModel)]="deviceAddressValue"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm form-group">
+            <label for="filterTime">Filter Time</label>
+            <input
+              type="text"
+              id="filterTime"
+              class="form-control"
+              name="filterTime"
+              ngModel
+              required
+              [(ngModel)]="filterTimeValue"
+            >
+          </div>
+          <div class="col-sm form-group">
+            <label for="rfPower">RF Power</label>
+            <input
+              type="text"
+              id="rfPower"
+              class="form-control"
+              name="rfPower"
+              ngModel
+              required
+              [(ngModel)]="rfPowerValue"
+            >
+          </div>
+          <div class="col-sm form-group">
+            <label for="beepEnable">Beep Enable</label>
+            <input
+              type="text"
+              id="beepEnable"
+              class="form-control"
+              name="beepEnable"
+              ngModel
+              required
+              [(ngModel)]="beepEnableValue"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-3 form-group">
+            <label for="uartBaudRate">UartBaudRate</label>
+            <input
+              type="text"
+              id="uartBaudRate"
+              class="form-control"
+              name="uartBaudRate"
+              ngModel
+              required
+              [(ngModel)]="uartBaudRateValue"
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <button
+              class="btn btn-success"
+              type="submit"
+             [disabled]="!f.valid || !isOpenRFIDReader"
+            > Update </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

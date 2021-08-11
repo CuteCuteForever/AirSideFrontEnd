@@ -1,0 +1,110 @@
+
+<div class="container pt-xl-5 pt-md-5 pt-5">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-8 col-md-7 col-md-offset-7">
+      <h1>Borrow Transponder <span class="badge badge-secondary"> {{ size }}</span> </h1>
+    </div>
+  </div>
+</div>
+
+<div class="container pt-xl-2 pt-md-2 pt-2">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <div class="alert alert-success" *ngIf="isSuccessful && successMessage">
+        {{ successMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container pt-xl-2 pt-md-2 pt-2">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="(isError && errorMessage)"
+      >
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container pt-xl-3 pt-md-3 pt-3">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+        <div class="row">
+          <div class="col-sm">
+            <button class="btn btn-primary"
+                    type="Button"
+                    (click)="EPCButtonPress(f);"
+            [disabled]="!isRFIDConnectedNow"
+            >
+             Scan
+            </button>
+          </div>
+          <div class="col-sm">
+            <button class="btn btn-primary" type="Button" (click)="onRemoveEPC();">
+              Remove
+            </button>
+          </div>
+        </div>
+
+        <div class="row pt-3">
+          <div class="col-sm-8 form-group">
+            <label>Company</label>
+            <ng-select [items]="companyArray"
+                       bindLabel="companyName"
+                       placeholder="Select Company"
+                       [(ngModel)]="selectedCompany"
+                       required
+                       name="company"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <label>Vehicle</label>
+            <ng-select [items]="vehicleArray"
+                       bindLabel="registrationNumber"
+                       placeholder="Select Vehicle"
+                       [(ngModel)]="selectedVehicle"
+                       required
+                       name="vehicle">
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row pt-2">
+          <div class="col-sm-10 form-group">
+            <button
+              class="btn btn-success"
+              type="submit"
+              [disabled]="!f.valid">
+              Borrow Transponder </button>
+          </div>
+        </div>
+
+        <div class="row pt-4">
+          <div class="col-sm-8 form-group">
+            <ul class="list-group">
+              Please click Scan to borrow
+              <a
+                class="list-group-item"
+                style="cursor: pointer"
+                *ngFor="let transponderItem of transponderArray; let i = index"
+              >
+                {{ transponderItem.callSign }}  |  {{ transponderItem.serialNumber}} | {{ transponderItem.epc}}
+              </a>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
