@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {ReturnEPC} from "./returnEPC.model";
-import {ReturnTransponderService} from "./return-transponder.service";
 import {Subscription} from "rxjs";
-import {Company} from "../borrow-transponder/company.model";
-import {Vehicle} from "../borrow-transponder/vehicle.model";
-import {ReturnTransponder} from "./returnTransponder.model";
+import {ReturnTransponderModel} from "./return-transponder.model";
 import {RFIDServiceService} from "../../airside/rfid/rfidservice.service";
+import {Transponder} from "../borrow-transponder/transponder.model";
+import {TransponderStatusService} from "./transponder-status.service";
 
 @Component({
   selector: 'app-return-transponder',
@@ -15,112 +13,124 @@ import {RFIDServiceService} from "../../airside/rfid/rfidservice.service";
 })
 export class ReturnTransponderComponent implements OnInit {
 
-  isRFIDConnectedNow = false;
-
-  isInserted = false
-  epcArray: ReturnEPC[];
-  private subscription: Subscription;
-  epcBtnValue = "Scan EPC";
-  isScanningEPC = false;
+  isSuccessful = false;
+  successMessage = "";
   isError = false;
-  companyArray:  Company[];
-  vehicleArray:  Vehicle[];
-  selectedCompany : Company ;
-  selectedVehicle : Vehicle ;
   errorMessage : string;
+
+  transponderArray: Transponder[];
+  subscription: Subscription;
+
+  isRFIDConnectedNow = false;
+  isScanningEPC = false;
   transponderID : string;
-  epcNumber : string ;
   size : number = 0;
 
-  constructor(private returnTransponderService : ReturnTransponderService , private rfidService : RFIDServiceService) { }
+  constructor(private transponderStatusService : TransponderStatusService  , private rfidService : RFIDServiceService) { }
 
   ngOnInit() {
 
     this.isRFIDConnectedNow = this.rfidService.isRFIDConnected ;
 
-    if (!this.isRFIDConnectedNow) {
-      this.errorMessage = "RFID Card Reader not connected. Please connect it before scanning."
-    }
+    this.transponderArray = this.transponderStatusService.getTransponderArray();
 
-    this.epcArray = this.returnTransponderService.getEPCs();
-    this.subscription = this.returnTransponderService.epcChangedArray
+    this.subscription = this.transponderStatusService.transponderSubject
       .subscribe(
-        (epcArray: ReturnEPC[]) => {
-          this.epcArray = epcArray;
+        (transponderArray: Transponder[]) => {
+          this.transponderArray = transponderArray;
         }
       );
+
+    if (!this.isRFIDConnectedNow) {
+      this.setErrorMessage("RFID Card Reader not connected. Please connect it before scanning.")
+    }
+
+    this.size = this.transponderArray.length
   }
 
   onRemoveEPC(){
-    this.returnTransponderService.deleteEPC(this.epcArray.length-1);
-    //form.reset();
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+    this.transponderStatusService.deleteEPC(this.transponderArray.length-1);
   }
 
-  async onSubmit(form: NgForm) {
-    for (const epc of this.epcArray) {
+  onSubmit(form: NgForm) {
 
-      const returnTransponder: ReturnTransponder = new ReturnTransponder(
-        epc.epcNumber,
-        "INVALID",
-        new Date()
-      );
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
 
-      await this.returnTransponderService.insertTranponderReturn(returnTransponder).toPromise()
-      await this.returnTransponderService.updateBorrowedTransponderRowRecordStatus(epc.epcNumber , "INVALID").toPromise()
+    let returnTransponderModelArray : ReturnTransponderModel[] = [];
 
-      this.isInserted = true;
-    }
+    this.transponderArray.forEach( (transponder : Transponder) =>  {
+
+      let returnTransponderModel : ReturnTransponderModel = new ReturnTransponderModel(
+        transponder.epc,
+        transponder.callSign,
+        transponder.serialNumber);
+
+      returnTransponderModelArray.push(returnTransponderModel);
+
+    });
+
+    this.transponderStatusService.insertReturnTransponderStatus(JSON.stringify(returnTransponderModelArray)).subscribe( (data : any) =>{
+      this.setSuccessMessage(data.message)
+    } , (error : any) =>{
+      console.log(error)
+      if (error.error.message){
+        this.setErrorMessage(error.error.message)
+      }
+    });
 
     form.reset();
   }
 
-  async EPCButtonPress(form: NgForm){
+  EPCButtonPress(form: NgForm){
+
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
+    let transponderModel: Transponder ;
 
     if (!this.isScanningEPC){
 
       this.isScanningEPC = true;
-      this.epcBtnValue = "Scanning";
 
-      await this.returnTransponderService.scanEPC().toPromise().then((data: any) => {
-        this.epcNumber = data.message;
+      this.transponderStatusService.scanEPC().subscribe((data: Transponder) => {
         this.isScanningEPC = false;
+        transponderModel = data;
       }, (error: any) => {
         console.log(error.error.message)
-        this.errorMessage = error.error.message;
-        this.isError = true;
+        this.setErrorMessage(error.error.message)
       })
 
-      //need to check from db if transponder exist on db or not
-      let isBorrowExist = await this.returnTransponderService.checkReturnedTransponderExistInDB(this.epcNumber , "valid").toPromise().then((data: any) => {
-        this.isError = true;
-        this.errorMessage = "Transponder already being borrowed. Please scan another."
-        return true; //transponder in borrowed database found
-      }).catch((err) => {
-        return false; //no transponder found in borrowed database found
-      });
-
-      if (this.epcNumber !== "" && !isBorrowExist) {
-        let epc: ReturnEPC = new ReturnEPC()
-
-        //we call transponder rest api because we need to get the call sign and serial number display on screen
-        await this.returnTransponderService.getTransponderByEPCAndRowRecordStatus(this.epcNumber, "valid").toPromise().then((data: any) => {
-          epc.epcNumber = data.epc
-          epc.callSign = data.callSign
-          epc.serialNumber = data.serialNumber
-        })
-
-        if (!this.returnTransponderService.isEPCFoundInFrontEndArray(epc.epcNumber)) {
-          this.returnTransponderService.addEPC(epc.epcNumber, epc.callSign);
-        } else {
-          this.errorMessage = "Transponder already being scanned already. Please select another."
-          this.isError = true;
-        }
-      }else {
-        this.isScanningEPC = false
+      // @ts-ignore
+      if (transponderModel !== undefined) {
+        this.transponderStatusService.addTransponderToTransponderModelArray(transponderModel);
       }
+      this.size = this.transponderStatusService.getTransponderArray().length;
     }
 
-    this.size = this.returnTransponderService.getEPCs().length ;
+    this.isScanningEPC = false;
+  }
+
+  clearErrorMessage(){
+    this.isError = false;
+    this.errorMessage = "";
+  }
+
+  setErrorMessage(errorMessage : string) {
+    this.isError = true;
+    this.errorMessage = errorMessage;
+  }
+
+  setSuccessMessage(successMessage : string) {
+    this.isSuccessful = true;
+    this.successMessage = successMessage;
+  }
+
+  clearSuccessMessage() {
+    this.isSuccessful = true;
+    this.successMessage = "";
   }
 
 }

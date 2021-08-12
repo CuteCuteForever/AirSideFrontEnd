@@ -5,7 +5,6 @@ export class TransponderStatusModel {
     public companyId: string,
     public out_timestamp: Date,
     public in_timestamp: Date,
-    public rentalDuration: string,
     public transponderId: string,
     public transponderStatus: string,
     public vehicleId: string,

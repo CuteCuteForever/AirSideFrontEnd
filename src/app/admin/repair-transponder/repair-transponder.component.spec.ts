@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TransponderStatusComponent } from './transponder-status.component';
+import { RepairTransponderComponent } from './repair-transponder.component';
 
-describe('TransponderStatusComponent', () => {
-  let component: TransponderStatusComponent;
-  let fixture: ComponentFixture<TransponderStatusComponent>;
+describe('RepairTransponderComponent', () => {
+  let component: RepairTransponderComponent;
+  let fixture: ComponentFixture<RepairTransponderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TransponderStatusComponent ]
+      declarations: [ RepairTransponderComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransponderStatusComponent);
+    fixture = TestBed.createComponent(RepairTransponderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

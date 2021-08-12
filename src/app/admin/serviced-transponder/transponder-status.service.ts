@@ -1,9 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Subject} from "rxjs";
-import {Vehicle} from "./vehicle.model";
 import {Transponder} from "./transponder.model";
-import {Company} from "./company.model";
 
 const REST_API_SERVER = 'http://localhost:8080/';
 const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
@@ -41,21 +39,15 @@ export class TransponderStatusService {
     this.transponderSubject.next(this.transponderArray.slice());
   }
 
-  getCompany(){
-    return this.http.get<Company[]>(REST_API_SERVER+'companyInfos');
-  }
-
-  getVehicle(){
-    return this.http.get<Vehicle[]>(REST_API_SERVER+'vehicleInfos');
-  }
 
   deleteEPC(index: number) {
     this.transponderArray.splice(index, 1);
     this.transponderSubject.next(this.transponderArray.slice());
   }
 
-  insertBorrowTransponderStatus(jsonTranspondersArray : any){
-    return this.http.post<any>(REST_API_SERVER+'insertborrowtransponder', jsonTranspondersArray, {headers: headers}) ;
+
+  insertServicedTransponderStatus(jsonTranspondersArray : any){
+    return this.http.post<any>(REST_API_SERVER+'insertservicedtransponder', jsonTranspondersArray, {headers: headers}) ;
   }
 
 }

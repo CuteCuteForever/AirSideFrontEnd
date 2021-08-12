@@ -28,13 +28,9 @@ export class AddTransponderComponent implements OnInit {
 
   serviceAvailabilityArray =  [
     {id: 1, value: 'Spare'},
-    {id: 1, value: 'Not Spare'},
+    {id: 2, value: 'Not Spare'},
   ];
 
-  isCallSignFound = false
-  isEPCFound = false
-
-  warrantyDate : any ;
 
   constructor(private registerTransponderService : RegisterTransponderService , private rfidService : RFIDServiceService) { }
 
@@ -50,33 +46,40 @@ export class AddTransponderComponent implements OnInit {
 
    onSubmit(form: NgForm) {
 
-  console.log(" AAAA "+this.selectedServiceAvailability.value)
+     this.clearErrorMessage();
+     this.clearSuccessMessage();
 
-    this.clearErrorMessage();
-    this.clearSuccessMessage();
+     if (form.value.warrantyFromDate > form.value.warrantyToDate) {
+       console.log("here")
+       this.setErrorMessage("Warranty From Date cannot be older than Warrant To Date.")
+     }
 
-    const transponder : Transponder = new Transponder(
-      form.value.callSign ,
-      form.value.serialNumber ,
-      this.selectedServiceAvailability.value,
-      form.value.description ,
-      form.value.warranty,
-      this.epcTxtBoxValue,
-      "valid" ,
-      new Date());
+     if (!this.isError) {
 
-    this.registerTransponderService.insertTransponder(transponder).subscribe({
-      next: data => {
-        this.setSuccessMessage(data.message);
-      },
-      error: error => {
-        if (error.error.message) {
-          this.setErrorMessage(error.error.message);
-        }
-      }
-    })
+     const transponder: Transponder = new Transponder(
+       form.value.callSign,
+       form.value.serialNumber,
+       this.selectedServiceAvailability.value,
+       form.value.description,
+       form.value.warrantyFromDate,
+       form.value.warrantyToDate,
+       this.epcTxtBoxValue,
+       "valid",
+       new Date());
 
-    form.reset();
+     this.registerTransponderService.insertTransponder(transponder).subscribe({
+       next: data => {
+         this.setSuccessMessage(data.message);
+       },
+       error: error => {
+         if (error.error.message) {
+           this.setErrorMessage(error.error.message);
+         }
+       }
+     })
+
+     form.reset();
+   }
   }
 
 
@@ -93,12 +96,10 @@ export class AddTransponderComponent implements OnInit {
         this.epcBtnValue = "Start Scan";
         this.isScanningEPC = false
       }, error => {
-        if (error.message){
+        if (error.error.message){
+          this.setErrorMessage(error.error.message)
           console.log(error.message)
         }
-        console.log(error)
-        this.isError = true;
-        this.epcBtnValue = "Start Scan";
         this.isScanningEPC = false
       });
     }

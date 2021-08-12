@@ -1,47 +1,33 @@
 import { Component, OnInit } from '@angular/core';
+import {Transponder} from "../borrow-transponder/transponder.model";
+import {Subscription} from "rxjs";
 import {TransponderStatusService} from "./transponder-status.service";
 import {RFIDServiceService} from "../../airside/rfid/rfidservice.service";
-import {RegisterTransponderService} from "../register-transponder/register-transponder.service";
-import {Transponder} from "./transponder.model";
-import {Subscription} from "rxjs";
-import {Company} from "./company.model";
-import {Vehicle} from "./vehicle.model";
 import {NgForm} from "@angular/forms";
-import {TransponderStatusModel} from "./transponder-status.model";
-import {tap} from "rxjs/operators";
+import {ReturnTransponderModel} from "../return-transponder/return-transponder.model";
+import {RepairTransponderModel} from "./repair-transponder.model";
 
 @Component({
-  selector: 'app-borrow-transponder',
-  templateUrl: './borrow-transponder.component.html',
-  styleUrls: ['./borrow-transponder.component.css']
+  selector: 'app-repair-transponder',
+  templateUrl: './repair-transponder.component.html',
+  styleUrls: ['./repair-transponder.component.css']
 })
-export class BorrowTransponderComponent implements OnInit {
+export class RepairTransponderComponent implements OnInit {
 
   isSuccessful = false;
-  successMessage = ""
+  successMessage = "";
   isError = false;
-  errorMessage = ""
+  errorMessage : string;
 
   transponderArray: Transponder[];
   subscription: Subscription;
 
-  isScanningEPC = false;
   isRFIDConnectedNow = false;
-  companyArray:  Company[];
-  vehicleArray:  Vehicle[];
-  selectedCompany : Company ;
-  selectedVehicle : Vehicle ;
+  isScanningEPC = false;
   transponderID : string;
   size : number = 0;
 
-  rentalDurationArray = [
-    {id: 1, value: 'Daily'},
-    {id: 2, value: 'Weekly'},
-    {id: 3, value: 'Monthly'},
-    {id: 4, value: 'Yearly'},
-  ];
-
-  constructor(private transponderStatusService : TransponderStatusService , private rfidService : RFIDServiceService ,private registerTransponderService : RegisterTransponderService) { }
+  constructor(private transponderStatusService : TransponderStatusService  , private rfidService : RFIDServiceService) { }
 
   ngOnInit() {
 
@@ -60,22 +46,6 @@ export class BorrowTransponderComponent implements OnInit {
       this.setErrorMessage("RFID Card Reader not connected. Please connect it before scanning.")
     }
 
-    this.transponderStatusService.getCompany().subscribe( data => {
-      this.companyArray = data;
-    }, error => {
-      if (error.error.message){
-        this.setErrorMessage(error.error.message);
-      }
-    });
-
-    this.transponderStatusService.getVehicle().subscribe( data => {
-      this.vehicleArray = data;
-    }, error => {
-      if (error.error.message){
-        this.setErrorMessage(error.error.message);
-      }
-    });
-
     this.size = this.transponderArray.length
   }
 
@@ -85,32 +55,25 @@ export class BorrowTransponderComponent implements OnInit {
     this.transponderStatusService.deleteEPC(this.transponderArray.length-1);
   }
 
-   onSubmit(form: NgForm) {
+  onSubmit(form: NgForm) {
 
     this.clearErrorMessage();
     this.clearSuccessMessage();
 
-    let transponderStatusModelArray : TransponderStatusModel[] = [];
+    let repairTransponderModelArray : RepairTransponderModel[] = [];
 
     this.transponderArray.forEach( (transponder : Transponder) =>  {
 
-      let transponderStatusModel : TransponderStatusModel = new TransponderStatusModel(
+      let repairTransponderModel : RepairTransponderModel = new RepairTransponderModel(
         transponder.epc,
-        form.value.company.companyId,
-        new Date(),
-        new Date(), //ignoring this value
-        form.value.rentalDuration.value, //ignoring this value
-        transponder.transponderId,
-        "Rent Out",
-        form.value.vehicle.vehicleId,
-        "valid",
-        new Date());
+        transponder.callSign,
+        transponder.serialNumber);
 
-       transponderStatusModelArray.push(transponderStatusModel);
+      repairTransponderModelArray.push(repairTransponderModel);
 
     });
 
-    this.transponderStatusService.insertBorrowTransponderStatus(JSON.stringify(transponderStatusModelArray)).subscribe( (data : any) =>{
+    this.transponderStatusService.insertRepairTransponderStatus(JSON.stringify(repairTransponderModelArray)).subscribe( (data : any) =>{
       this.setSuccessMessage(data.message)
     } , (error : any) =>{
       console.log(error)
@@ -119,17 +82,17 @@ export class BorrowTransponderComponent implements OnInit {
       }
     });
 
-     form.reset();
+    form.reset();
   }
 
-  EPCButtonPress(form: NgForm) {
+  EPCButtonPress(form: NgForm){
 
     this.clearErrorMessage();
     this.clearSuccessMessage();
 
     let transponderModel: Transponder ;
 
-    if (!this.isScanningEPC) {
+    if (!this.isScanningEPC){
 
       this.isScanningEPC = true;
 
@@ -141,19 +104,14 @@ export class BorrowTransponderComponent implements OnInit {
         this.setErrorMessage(error.error.message)
       })
 
-
       // @ts-ignore
       if (transponderModel !== undefined) {
         this.transponderStatusService.addTransponderToTransponderModelArray(transponderModel);
       }
-
       this.size = this.transponderStatusService.getTransponderArray().length;
     }
-    this.isScanningEPC = false;
-  }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.isScanningEPC = false;
   }
 
   clearErrorMessage(){
