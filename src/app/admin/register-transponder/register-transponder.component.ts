@@ -2,12 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {RegisterTransponderService} from "./register-transponder.service";
 import {Transponder} from "./transponder.model";
-import {CompanyTransponder} from "./company-transponder.model";
 import {RFIDServiceService} from "../../airside/rfid/rfidservice.service";
-import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const REST_API_SERVER = 'http://localhost:8080/';
 
@@ -44,7 +39,7 @@ export class AddTransponderComponent implements OnInit {
   constructor(private registerTransponderService : RegisterTransponderService , private rfidService : RFIDServiceService) { }
 
   ngOnInit() {
-    this.epcTxtBoxValue = "TESTING1"
+    this.epcTxtBoxValue = "E20030340404010"
     this.isRFIDConnectedNow = this.rfidService.isRFIDConnected ;
 
     if (!this.isRFIDConnectedNow) {

@@ -1,21 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import {TransponderStatusService} from "./transponder-status.service";
 import {RFIDServiceService} from "../../airside/rfid/rfidservice.service";
 import {RegisterTransponderService} from "../register-transponder/register-transponder.service";
-import {Transponder} from "./transponder.model";
+import {Transponder} from "../borrow-transponder/transponder.model";
 import {Subscription} from "rxjs";
-import {Company} from "./company.model";
-import {Vehicle} from "./vehicle.model";
+import {Company} from "../borrow-transponder/company.model";
+import {Vehicle} from "../borrow-transponder/vehicle.model";
 import {NgForm} from "@angular/forms";
-import {TransponderStatusModel} from "./transponder-status.model";
-import {tap} from "rxjs/operators";
+import {TransponderStatusService} from "../borrow-transponder/transponder-status.service";
+import {TransponderStatusModel} from "../borrow-transponder/transponder-status.model";
 
 @Component({
-  selector: 'app-borrow-transponder',
-  templateUrl: './borrow-transponder.component.html',
-  styleUrls: ['./borrow-transponder.component.css']
+  selector: 'app-transponder-status',
+  templateUrl: './transponder-status.component.html',
+  styleUrls: ['./transponder-status.component.css']
 })
-export class BorrowTransponderComponent implements OnInit {
+export class TransponderStatusComponent {
+
+  constructor(private transponderStatusService : TransponderStatusService , private rfidService : RFIDServiceService ,private registerTransponderService : RegisterTransponderService) { }
 
   isSuccessful = false;
   successMessage = ""
@@ -35,8 +36,6 @@ export class BorrowTransponderComponent implements OnInit {
   epcNumber : string ="" ;
   size : number = 0;
 
-  constructor(private transponderStatusService : TransponderStatusService , private rfidService : RFIDServiceService ,private registerTransponderService : RegisterTransponderService) { }
-
   ngOnInit() {
 
     this.isRFIDConnectedNow = this.rfidService.isRFIDConnected ;
@@ -55,17 +54,19 @@ export class BorrowTransponderComponent implements OnInit {
     this.transponderStatusService.getCompany().subscribe( data => {
       this.companyArray = data;
     }, error => {
-      if (error.error.message){
-        this.setErrorMessage(error.error.message);
+      if (error.message){
+        this.errorMessage = error.message
       }
+      this.isError = true;
     });
 
     this.transponderStatusService.getVehicle().subscribe( data => {
       this.vehicleArray = data;
     }, error => {
-      if (error.error.message){
-        this.setErrorMessage(error.error.message);
+      if (error.message){
+        this.errorMessage = error.message
       }
+      this.isError = true;
     });
 
   }
@@ -81,39 +82,22 @@ export class BorrowTransponderComponent implements OnInit {
     this.clearErrorMessage();
     this.clearSuccessMessage();
 
-    let transponderStatusModelArray : TransponderStatusModel[] = [];
+    console.log( form.value.company.companyId)
+    console.log( form.value.vehicle.vehicleId)
 
+    let transponderStatusModel : TransponderStatusModel;
     this.transponderArray.forEach( (transponder : Transponder) =>  {
-
-      let transponderStatusModel : TransponderStatusModel = new TransponderStatusModel(
-        transponder.epc,
-        form.value.company.companyId,
-        new Date(),
-        new Date(1970, 0, 1, 9, 30), //ignoring this value
-        transponder.transponderId,
-        "Rent Out",
-        form.value.vehicle.vehicleId,
-        "valid",
-        new Date());
-
-       transponderStatusModelArray.push(transponderStatusModel);
+      transponderStatusModel.epc = transponder.epc;
+      transponderStatusModel.companyId = form.value.company.companyId;
+      transponderStatusModel.out_timestamp = new Date();
+      //transponderStatusModel.in_timestamp = // no need enter. leave it blank
+      transponderStatusModel.transponderId = transponder.transponderId;
+      transponderStatusModel.transponderStatus = "Rent Out";
+      transponderStatusModel.vehicleId = form.value.vehicle.vehicleId;
+      transponderStatusModel.rowRecordStatus = "valid";
+      transponderStatusModel.timestamp = new Date();
 
     });
-
-    console.log(JSON.stringify(transponderStatusModelArray))
-
-    this.transponderStatusService.insertTranponderStatus(JSON.stringify(transponderStatusModelArray)).subscribe( (data : any) =>{
-      this.setSuccessMessage(data.message)
-    } , (error : any) =>{
-      console.log(error)
-      if (error.error.message){
-        this.setErrorMessage(error.error.message)
-      }
-    });
-
-
-
-
   }
 
   EPCButtonPress(form: NgForm) {

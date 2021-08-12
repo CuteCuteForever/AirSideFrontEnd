@@ -13,13 +13,12 @@ export class AddVehicleComponent implements OnInit {
 
   constructor(private addVehicleService : AddVehicleService) { }
 
-  companyArray:  Company[];
-  selectedCompany : Company ;
-
   isError  = false ;
   isSuccessful = false;
   successMessage = "";
   errorMessage : string ;
+
+  companyArray:  Company[];
 
   onSubmit(form: NgForm) {
 
@@ -27,7 +26,7 @@ export class AddVehicleComponent implements OnInit {
     this.clearSuccessMessage();
 
     const vehicle: Vehicle = new Vehicle(
-      this.selectedCompany.companyId,
+      form.value.company.companyId,
       form.value.registrationNumber,
       "valid",
       new Date()

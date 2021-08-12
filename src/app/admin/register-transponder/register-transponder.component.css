@@ -5,3 +5,9 @@ button.calendar, button.calendar:active {
   background-size: 23px;
   background-position: center;
 }
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}

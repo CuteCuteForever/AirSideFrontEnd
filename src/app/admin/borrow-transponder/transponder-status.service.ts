@@ -1,43 +1,41 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Subject} from "rxjs";
-import {CompanyTransponder} from "../register-transponder/company-transponder.model";
 import {Vehicle} from "./vehicle.model";
-import {BorrowTransponder} from "./borrowTransponder.model";
 import {Transponder} from "./transponder.model";
+import {Company} from "./company.model";
 
 const REST_API_SERVER = 'http://localhost:8080/';
+const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
 
 @Injectable({
   providedIn: 'root'
 })
-export class BorrowTransponderService {
-
+export class TransponderStatusService {
 
   isRemoveFirstRow = false;
   transponderSubject = new Subject<Transponder[]>();
 
   private transponderArray: Transponder[] = [
-    new Transponder("1" , "E20030340404010", "BRAVO" , "DescriptionAAA" , "valid", "111-222",  new Date("2021-08-11 19:29:35.000000"), "Working"),
-    new Transponder("2" , "E20030340404011", "Charlie" , "DescriptionBBB" , "valid", "111-222",  new Date("2021-08-11 19:29:35.000000"), "Working")
+    new Transponder("2" , "BRAVO", "1111-2222" , "Not Spare" , "Used for airside", new Date("2021-08-25 16:00:00.000000"), "E20030340404010", "valid" , new Date()),
     /*new EPC("E20030340404010", "BRAVO" , "111-222")
-    new EPC("E20030340404011", "BRAVO" , "111-222"),
-    new EPC("E20030340404012", "BRAVO" , "111-222"),
-    new EPC("E20030340404013", "BRAVO" , "111-222"),
-    new EPC("E20030340404014", "BRAVO" , "111-222"),
-    new EPC("E20030340404015", "BRAVO" , "111-222"),
-    new EPC("E20030340404016", "BRAVO" , "111-222"),
-    new EPC("E20030340404017", "BRAVO" , "111-222"),
-    new EPC("E20030340404018", "BRAVO" , "111-222"),
-    new EPC("E20030340404019", "BRAVO" , "111-222"),
-    new EPC("E20030340404020", "BRAVO" , "111-222"),
-    new EPC("E20030340404021", "BRAVO" , "111-222"),
-    new EPC("E20030340404022", "BRAVO" , "111-222"),
-    new EPC("E20030340404023", "BRAVO" , "111-222"),
-    new EPC("E20030340404024", "BRAVO" , "111-222"),
-    new EPC("E20030340404025", "BRAVO" , "111-222"),
-    new EPC("E20030340404026", "BRAVO" , "111-222"),
-    new EPC("E20030340404027", "BRAVO" , "111-222")*/
+   new EPC("E20030340404011", "BRAVO" , "111-222"),
+   new EPC("E20030340404012", "BRAVO" , "111-222"),
+   new EPC("E20030340404013", "BRAVO" , "111-222"),
+   new EPC("E20030340404014", "BRAVO" , "111-222"),
+   new EPC("E20030340404015", "BRAVO" , "111-222"),
+   new EPC("E20030340404016", "BRAVO" , "111-222"),
+   new EPC("E20030340404017", "BRAVO" , "111-222"),
+   new EPC("E20030340404018", "BRAVO" , "111-222"),
+   new EPC("E20030340404019", "BRAVO" , "111-222"),
+   new EPC("E20030340404020", "BRAVO" , "111-222"),
+   new EPC("E20030340404021", "BRAVO" , "111-222"),
+   new EPC("E20030340404022", "BRAVO" , "111-222"),
+   new EPC("E20030340404023", "BRAVO" , "111-222"),
+   new EPC("E20030340404024", "BRAVO" , "111-222"),
+   new EPC("E20030340404025", "BRAVO" , "111-222"),
+   new EPC("E20030340404026", "BRAVO" , "111-222"),
+   new EPC("E20030340404027", "BRAVO" , "111-222")*/
   ];
 
   constructor(private http: HttpClient) { }
@@ -88,7 +86,7 @@ export class BorrowTransponderService {
   }
 
   getCompany(){
-    return this.http.get<CompanyTransponder[]>(REST_API_SERVER+'companyInfos');
+    return this.http.get<Company[]>(REST_API_SERVER+'companyInfos');
   }
 
   getVehicle(){
@@ -104,8 +102,10 @@ export class BorrowTransponderService {
     return this.http.get(REST_API_SERVER+'gettransponderbyepc/'+epcNumber);
   }
 
-  insertTranponderBorrower(jsonTranspondersArray : string){
-    return this.http.post<any>(REST_API_SERVER+'insertBorrowTransponder', jsonTranspondersArray) ;
+
+
+  insertTranponderStatus(jsonTranspondersArray : any){
+    return this.http.post<any>(REST_API_SERVER+'insertborrowtransponder', jsonTranspondersArray, {headers: headers}) ;
   }
 
 }

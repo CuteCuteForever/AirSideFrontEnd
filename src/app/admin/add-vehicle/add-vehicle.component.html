@@ -1,25 +1,10 @@
-<div class="container pt-xl-5 pt-md-5 pt-5">
-  <div class="row justify-content-md-center center">
-    <div class="col-xs-12 col-md-7 col-md-offset-7">
-      <h1>Register Vehicle <span class="badge badge-secondary">New</span></h1>
-    </div>
-  </div>
-</div>
-
-<div class="container pt-xl-2 pt-md-2 pt-2">
+<div class="container pt-xl-5 pt-md-2 pt-5">
   <div class="row justify-content-md-center center">
     <div class="col-xs-12 col-md-7 col-md-offset-7">
       <div class="alert alert-success"
            *ngIf="isSuccessful && successMessage">
         {{ successMessage }}
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="container pt-xl-2 pt-md-2 pt-2">
-  <div class="row justify-content-md-center center">
-    <div class="col-xs-12 col-md-7 col-md-offset-7">
       <div
         class="alert alert-danger"
         role="alert"
@@ -31,8 +16,7 @@
   </div>
 </div>
 
-
-<div class="container pt-xl-2 pt-md-2 pt-2">
+<div class="container pt-xl-5 pt-md-5 pt-5">
   <div class="row justify-content-md-center center">
     <div class="col-xs-12 col-md-6 col-md-offset-3">
 
@@ -44,8 +28,8 @@
             <ng-select [items]="companyArray"
                        bindLabel="companyName"
                        placeholder="Select Company"
-                       [(ngModel)]="selectedCompany"
                        name="company"
+                       ngModel
                        required>
             </ng-select>
           </div>

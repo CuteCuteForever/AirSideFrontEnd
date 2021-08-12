@@ -1,13 +1,15 @@
 
 export class Transponder {
   constructor(
-    public transponderID : string,
-    public epc: string,
+    public transponderId: string,
     public callSign: string,
-    public description: string,
-    public rowRecordStatus: string,
     public serialNumber: string,
-    public timestamp : Date,
-    public transponderStatus: string,
-  ) {}
+    public serviceAvailability: string,
+    public description: string,
+    public warranty: Date,
+    public epc: string,
+    public rowRecordStatus: string,
+    public timestamp: Date
+  ) {
+  }
 }

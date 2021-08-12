@@ -1,11 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable, Subject, throwError} from 'rxjs';
-import {VehicleCompany} from "../../airside/vehicle-information/vehicle.model";
-import {Company} from "../add-company/company.model";
-import {NgForm} from "@angular/forms";
 import {Transponder} from "./transponder.model";
-import {CompanyTransponder} from "./company-transponder.model";
 
 
 const REST_API_SERVER = 'http://localhost:8080/';
