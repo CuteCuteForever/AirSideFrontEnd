@@ -1,18 +1,18 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {BorrowReturnModel} from "./borrowReturn.model";
+import {TransponderStatusModel} from "./transponder-status.model";
 
 const REST_API_SERVER = 'http://localhost:8080/';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ViewBorrowerReturnService {
+export class ViewTransponderStatusService {
 
   constructor(private http: HttpClient) { }
 
-  getBorrowReturnTransponderStatus(){
-    return this.http.get<BorrowReturnModel[]>(REST_API_SERVER+'borrowreturntransponderstatusInfos');
+  getTransponderStatusView(){
+    return this.http.get<TransponderStatusModel[]>(REST_API_SERVER+'transponderstatusview');
   }
 
 }

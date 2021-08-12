@@ -6,7 +6,6 @@ import {Transponder} from "./transponder.model";
 import {ActivatedRoute} from "@angular/router";
 import {FormControl} from "@angular/forms";
 
-
 @Component({
   selector: 'app-view-transponder',
   templateUrl: './view-transponder.component.html',
@@ -14,7 +13,7 @@ import {FormControl} from "@angular/forms";
 })
 export class ViewTransponderComponent implements OnInit,AfterViewInit {
 
-  displayedColumns: string[] = ['transponderID', 'epc', 'call_sign', 'description', 'serial_number', 'transponder_status', 'row_record_status', 'timestamp'];
+  displayedColumns: string[] = [ 'call_sign', 'description', 'serial_number', 'serviceAvailability', 'warrantyFromDate' , 'warrantyToDate' , 'row_record_status', 'timestamp'];
   dataSource: MatTableDataSource<Transponder>
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -22,131 +21,73 @@ export class ViewTransponderComponent implements OnInit,AfterViewInit {
 
   public transponderArray: Transponder[] = [];
 
+  panelOpenState : boolean ;
   size: number = 0;
-  callSignFilter = new FormControl('');
-  idFilter = new FormControl('');
-  epcFilter = new FormControl('');
-  descriptionFilter = new FormControl('');
-  serialNumberFilter = new FormControl('');
-  transponderStatusFilter = new FormControl('');
-  rowRecordStatusFilter = new FormControl('');
-  timeStampFilter = new FormControl('');
-  filterValues = {
-    id: '',
-    epc: '',
+
+  callSignFilter = new FormControl('')
+  rowRecordStatusFilter = new FormControl('')
+
+  rowRecordStatusSources =  [
+    {display: 'valid', value: 'valid'},
+    {display: 'invalid', value: 'invalid'},
+  ];
+
+  filterValues : any = {
     callSign: '',
-    description: '',
-    serialNumber: '',
-    transponderStatus: '',
-    rowRecordStatus: '',
-    timeStamp: ''
-  };
+    rowRecordStatus: ''
+  }
 
   constructor(private route: ActivatedRoute) {
-
     this.transponderArray = this.route.snapshot.data.viewTransponders;
     this.dataSource = new MatTableDataSource(this.transponderArray);
-
     this.dataSource.filterPredicate = this.createFilter();
-
-
   }
 
   ngOnInit(): void {
-    /*    this.transponderArray = this.route.snapshot.data.viewTransponders;
-        this.dataSource = new MatTableDataSource(this.transponderArray);
-        this.dataSource.filterPredicate = this.createFilter();*/
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-
-    this.idFilter.valueChanges
-      .subscribe(
-        id => {
-          this.filterValues.id = id;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
-
-    this.epcFilter.valueChanges
-      .subscribe(
-        epc => {
-          this.filterValues.epc = epc;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
-
-    this.callSignFilter.valueChanges
-      .subscribe(
-        callSign => {
-          this.filterValues.callSign = callSign;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
-
-    this.descriptionFilter.valueChanges
-      .subscribe(
-        desc => {
-          this.filterValues.description = desc;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
-
-    this.serialNumberFilter.valueChanges
-      .subscribe(
-        serialNumber => {
-          this.filterValues.serialNumber = serialNumber;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
-
-    this.transponderStatusFilter.valueChanges
-      .subscribe(
-        transponderStatus => {
-          this.filterValues.transponderStatus = transponderStatus;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
-
-    this.rowRecordStatusFilter.valueChanges
-      .subscribe(
-        rrs => {
-          this.filterValues.rowRecordStatus = rrs;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
-
-    this.timeStampFilter.valueChanges
-      .subscribe(
-        ts => {
-          this.filterValues.timeStamp = ts;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-          this.size = this.dataSource.filteredData.length;
-        }
-      )
+    this.size = this.dataSource.data.length
+    this.fieldListener();
   }
 
+  private fieldListener() {
+    this.callSignFilter.valueChanges.subscribe(
+      s => {
+        this.filterValues.callSign = s;
+        this.dataSource.filter = JSON.stringify(this.filterValues);
+        this.size = this.dataSource.filteredData.length
+      }
+    )
+
+    this.rowRecordStatusFilter.valueChanges.subscribe(
+      s => {
+        this.filterValues.rowRecordStatus = s;
+        this.dataSource.filter = JSON.stringify(this.filterValues);
+        this.size = this.dataSource.filteredData.length
+      }
+    )
+  }
+
+  clearFilter() {
+    this.callSignFilter.setValue('');
+    this.rowRecordStatusFilter.setValue('');
+  }
 
   ngAfterViewInit() {
   }
 
-  createFilter(): (data: any, filter: string) => boolean {
-    let filterFunction = function (data: any, filter: any): boolean {
+
+  private createFilter(): (transponder: Transponder, filter: string) => boolean {
+    // @ts-ignore
+    let filterFunction = function (transponder, filter): boolean {
       let searchTerms = JSON.parse(filter);
-      return data.callSign.toLowerCase().indexOf(searchTerms.callSign.toLowerCase() , 0) === 0
-        && data.serialNumber.toLowerCase().indexOf(searchTerms.serialNumber.toLowerCase() , 0) === 0
-        && data.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase() , 0) === 0
-        && data.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase() , 0) === 0
-        && data.description.toLowerCase().indexOf(searchTerms.description.toLowerCase() , 0) === 0
+       console.log(filter)
+      return transponder.callSign.toLowerCase().indexOf(searchTerms.callSign.toLowerCase()) !== -1
+        && transponder.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0;
     }
     return filterFunction;
   }
 
 
 }
+
