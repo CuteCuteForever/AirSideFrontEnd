@@ -28,8 +28,13 @@ export class AddTransponderComponent implements OnInit {
   isScanningEPC = false;
   companyID : number;
   epcTxtBoxValue : string ;
-  serviceAvailability : string;
+  selectedServiceAvailability : any;
   size : string
+
+  serviceAvailabilityArray =  [
+    {id: 1, value: 'Spare'},
+    {id: 1, value: 'Not Spare'},
+  ];
 
   isCallSignFound = false
   isEPCFound = false
@@ -50,8 +55,7 @@ export class AddTransponderComponent implements OnInit {
 
    onSubmit(form: NgForm) {
 
-
-    console.log("AAA "+form.value.warranty);
+  console.log(" AAAA "+this.selectedServiceAvailability.value)
 
     this.clearErrorMessage();
     this.clearSuccessMessage();
@@ -59,7 +63,7 @@ export class AddTransponderComponent implements OnInit {
     const transponder : Transponder = new Transponder(
       form.value.callSign ,
       form.value.serialNumber ,
-      this.serviceAvailability,
+      this.selectedServiceAvailability.value,
       form.value.description ,
       form.value.warranty,
       this.epcTxtBoxValue,

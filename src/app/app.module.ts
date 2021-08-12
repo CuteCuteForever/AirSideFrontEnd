@@ -11,7 +11,6 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './Authentication/profile/profile.component';
 import { BoardUserComponent } from './Authentication/board-user/board-user.component';
 import { RegisterComponent } from './Authentication/register/register.component';
-import { HeaderComponent } from './header/header.component';
 import { authInterceptorProviders } from './Authentication/_helpers/auth.interceptor';
 import {BillingInformationComponent} from "./airside/billing-information/billing-information.component";
 import {VehicleInformationComponent} from "./airside/vehicle-information/vehicle-information.component";
@@ -49,6 +48,8 @@ import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatTableModule} from "@angular/material/table";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MenuListItemComponent} from "./navigation/menu-list-item/menu-list-item.component";
+import {NavigationComponent} from "./navigation/navigation.component";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ProfileComponent,
     BoardUserComponent,
     RegisterComponent,
-    HeaderComponent,
     AppComponent,
     BillingInformationComponent,
     RFIDComponent,
@@ -78,7 +78,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReturnTransponderComponent,
     SmallLoadingSpinnerComponent,
     ViewTransponderComponent,
-    BorrowReturnTransponderStatusComponent
+    BorrowReturnTransponderStatusComponent,
+    MenuListItemComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,

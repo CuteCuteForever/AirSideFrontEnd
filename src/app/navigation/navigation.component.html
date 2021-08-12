@@ -1,0 +1,37 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()" class="menu-button" fxHide fxShow.lt-md>
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>AirSide </span>
+  <span class="example-spacer"></span>
+
+  <button mat-icon-button class="example-icon" *ngIf="!isLoggedIn">
+    <mat-icon routerLink="/register">person_add_alt</mat-icon>
+  </button>
+  <button mat-icon-button class="example-icon" *ngIf="!isLoggedIn">
+    <mat-icon routerLink="/login">login</mat-icon>
+  </button>
+
+  <button mat-icon-button class="example-icon" *ngIf="isLoggedIn" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" [opened]="opened" >
+    <mat-nav-list>
+      <app-menu-list-item *ngFor="let item of topMenu" [item]="item"></app-menu-list-item>
+    </mat-nav-list>
+    <mat-divider ></mat-divider>
+    <mat-nav-list>
+      <app-menu-list-item *ngFor="let item of middleMenu" [item]="item"></app-menu-list-item>
+    </mat-nav-list>
+    <mat-divider ></mat-divider>
+    <mat-nav-list>
+      <app-menu-list-item *ngFor="let item of bottomMenu" [item]="item"></app-menu-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

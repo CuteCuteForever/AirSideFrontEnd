@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     if (this.isLoggedIn){
       this.isLoading = true;
       sleep(2000);
-      this.router.navigate(['/antenna']);
+      this.router.navigate(['/home']);
     }
   }
 

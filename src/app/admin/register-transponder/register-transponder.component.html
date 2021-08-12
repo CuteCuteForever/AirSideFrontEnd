@@ -127,19 +127,14 @@
 
         <div class="row">
           <div class="col-sm-8 form-group">
-            <label for="availability">Service Availability</label>
-            <select class="form-control form-control-lg"
-                    id="availability"
-                    name="availability"
-                    [(ngModel)]="serviceAvailability"
-                    aria-label=".form-select-lg example"
-                    required
-            >
-              <option value="Available">Available</option>
-              <option value="Repair">Repair</option>
-              <option value="Rent Out">Rent Out</option>
-              <option value="Repair">Repair</option>
-            </select>
+            <label >Service Availability</label>
+            <ng-select [items]="serviceAvailabilityArray"
+                       bindLabel="value"
+                       placeholder="Select"
+                       appendTo="body"
+                       name="serviceAvailability"
+                       [(ngModel)]="selectedServiceAvailability">
+            </ng-select>
           </div>
         </div>
 
