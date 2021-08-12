@@ -132,7 +132,7 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
       return transponderStatusModel.callSign.toLowerCase().indexOf(searchTerms.callSign.toLowerCase()) !== -1
         && transponderStatusModel.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0
         && transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
-        && transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0;
+        && searchTerms.rentalDuration === "" ? true : (transponderStatusModel.rentalDuration ? transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0 : false);
     }
     return filterFunction;
   }
