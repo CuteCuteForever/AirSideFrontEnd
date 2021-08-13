@@ -1,0 +1,14 @@
+
+p {
+  font-family: Lato;
+}
+
+table {
+  width: 100%;
+}
+
+mat-panel-title {
+  justify-content: center !important;
+}
+
+

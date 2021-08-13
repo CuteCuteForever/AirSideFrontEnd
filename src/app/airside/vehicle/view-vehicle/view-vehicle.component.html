@@ -1,0 +1,81 @@
+
+<div class="overflow-auto">
+
+  <mat-expansion-panel (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{panelOpenState ? 'Close Filter Window' : 'Open Filter Window'}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="row">
+      <div class="vertical-form-field">
+        <div class="col">
+          <mat-form-field appearance="fill" class="no-label-field">
+            <mat-label>Company Name</mat-label>
+            <input matInput placeholder="" value="" [formControl]="companyNameFilter">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="clearFilter()">Clear Filter</button>
+    </div>
+
+  </mat-expansion-panel>
+
+  <div class="container-fluid">
+    <div class="pt-4 pt-md-4 pt-4">
+      <button mat-raised-button>Total Records : {{ size }}</button>
+    </div>
+    <div class="pt-xl-4 pt-md-4 pt-4">
+      <table mat-table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
+        <!-- Position Column -->
+
+        <ng-container matColumnDef="companyName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Company Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="companyAddress">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Company Address </th>
+          <td mat-cell *matCellDef="let element"> {{element.companyAddress}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="contactPersonName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Contact Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.contactPersonName}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="contactPersonNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Contact No. </th>
+          <td mat-cell *matCellDef="let element"> {{element.contactPersonNumber}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
+          <td mat-cell *matCellDef="let element"> {{element.department}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="vehicleRegistrationNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Veh. Registration No. </th>
+          <td mat-cell *matCellDef="let element"> {{element.vehicleRegistrationNumber}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
