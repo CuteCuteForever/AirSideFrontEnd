@@ -8,6 +8,7 @@ export class TransponderStatusModel {
     public rentalDuration : string,
     public transponderId : string,
     public transponderStatus : string,
+    public dueSoon : string,
     public vehicleId : string,
     public rowRecordStatus : string,
     public timestamp : string,

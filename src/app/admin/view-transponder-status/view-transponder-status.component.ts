@@ -21,7 +21,8 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     'inTimestamp',
     'duration',
     'rentalDuration',
-    'transponderStatus' ,
+    'transponderStatus',
+    'dueNotice',
     'rowRecordStatus' ,
     'timestamp'];
 
@@ -38,6 +39,7 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
   callSignFilter = new FormControl('')
   rowRecordStatusFilter = new FormControl('')
   transponderStatusFilter = new FormControl('')
+  dueNoticeFilter = new FormControl('')
   rentalDurationFilter = new FormControl('')
 
   rowRecordStatusSources =  [
@@ -56,6 +58,10 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     {display: 'Available', value: 'Available'},
     {display: 'Rent Out', value: 'Rent Out'},
     {display: 'Repair', value: 'Repair'},
+  ];
+
+  dueNoticeSources =  [
+    {display: 'Due Soon', value: 'Due Soon'}
   ];
 
   filterValues : any = {
@@ -104,6 +110,14 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
       }
     )
 
+    this.dueNoticeFilter.valueChanges.subscribe(
+      s => {
+        this.filterValues.dueSoon = s;
+        this.dataSource.filter = JSON.stringify(this.filterValues);
+        this.size = this.dataSource.filteredData.length
+      }
+    )
+
     this.rentalDurationFilter.valueChanges.subscribe(
       s => {
         this.filterValues.rentalDuration = s;
@@ -118,6 +132,7 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     this.rowRecordStatusFilter.setValue('');
     this.transponderStatusFilter.setValue('');
     this.rentalDurationFilter.setValue('');
+    this.dueNoticeFilter.setValue('');
   }
 
   ngAfterViewInit() {
@@ -132,6 +147,7 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
       return transponderStatusModel.callSign.toLowerCase().indexOf(searchTerms.callSign.toLowerCase()) !== -1
         && transponderStatusModel.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0
         && transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
+        && searchTerms.dueSoon === "" ? true : (transponderStatusModel.dueSoon ? transponderStatusModel.dueSoon.toLowerCase().indexOf(searchTerms.dueSoon.toLowerCase()) === 0 : false)
         && searchTerms.rentalDuration === "" ? true : (transponderStatusModel.rentalDuration ? transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0 : false);
     }
     return filterFunction;

@@ -41,8 +41,10 @@
   </mat-expansion-panel>
 
   <div class="container-fluid">
-    <div class="pt-xl-10 pt-md-5 pt-5">
-
+    <div class="pt-4 pt-md-4 pt-4">
+    <button mat-raised-button>Total Records : {{ size }}</button>
+    </div>
+    <div class="pt-xl-4 pt-md-4 pt-4">
       <table mat-table [dataSource]="dataSource" matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
         <ng-container matColumnDef="call_sign">
           <tr><th mat-header-cell *matHeaderCellDef> Call Sign </th></tr>
@@ -92,7 +94,6 @@
                      showFirstLastButtons
                      aria-label="Select page of periodic elements">
       </mat-paginator>
-      <button mat-raised-button>Total Records : {{ size }}</button>
 
     </div>
   </div>

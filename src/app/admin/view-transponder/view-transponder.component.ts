@@ -11,7 +11,7 @@ import {FormControl} from "@angular/forms";
   templateUrl: './view-transponder.component.html',
   styleUrls: ['./view-transponder.component.css']
 })
-export class ViewTransponderComponent implements OnInit,AfterViewInit {
+export class ViewTransponderComponent implements OnInit,AfterViewInit  {
 
   displayedColumns: string[] = [ 'call_sign', 'description', 'serial_number', 'serviceAvailability', 'warrantyFromDate' , 'warrantyToDate' , 'row_record_status', 'timestamp'];
   dataSource: MatTableDataSource<Transponder>
