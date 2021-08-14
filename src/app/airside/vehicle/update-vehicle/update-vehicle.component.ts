@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Company} from "../../company/update-company/company.model";
 import {NgForm} from "@angular/forms";
-import {VehicleService} from "./update-vehicle.service";
-import {Vehicle} from "../add-vehicle/vehicle.model";
+import {UpdateVehicleService} from "./update-vehicle.service";
 import {VehicleCompanyModel} from "./vehicle-company.model";
+import {VehicleModel} from "./vehicle.model";
+import {CompanyModel} from "./company.model";
 
 @Component({
   selector: 'app-update-vehicle',
@@ -12,36 +12,38 @@ import {VehicleCompanyModel} from "./vehicle-company.model";
 })
 export class UpdateVehicleComponent  implements OnInit {
 
-  constructor(private vehicleService : VehicleService) { }
+  constructor(private updateVehicleService : UpdateVehicleService) { }
 
   isError  = false ;
   isSuccessful = false;
   successMessage = "";
   errorMessage : string ;
 
-  vehicleCompanyArray:  VehicleCompanyModel[];
-  vehicleCompany : VehicleCompanyModel;
 
-  registrationNumberSelected : string;
+  companySelected : CompanyModel;
+  vehicleSelected : VehicleModel;
+  registrationNG : string;
 
-  vehicleSelectArray : string[];
-  companySelectArray : string[];
+  vehicleSelectArray : VehicleModel[];
+  companySelectArray : CompanyModel[];
 
-  registrationFC : any;
+
 
   onSubmit(form: NgForm) {
 
     this.clearErrorMessage();
     this.clearSuccessMessage();
 
-   /* const vehicle: Vehicle = new Vehicle(
-      form.value.company.companyId,
-      form.value.registrationNumber,
+
+    const vehicle: VehicleModel = new VehicleModel(
+      this.vehicleSelected.vehicleId,
+      this.companySelected.companyId,
+      this.registrationNG,
       "valid",
       new Date()
     );
 
-    this.vehicleService.updateVehicle(vehicle).subscribe(
+    this.updateVehicleService.updateVehicle(vehicle).subscribe(
       (data : any) => {
         this.setSuccessMessage(data.message)
         form.reset();
@@ -51,7 +53,7 @@ export class UpdateVehicleComponent  implements OnInit {
           this.setErrorMessage(error.error.message)
         }
       }
-    );*/
+    );
 
   }
 
@@ -60,30 +62,25 @@ export class UpdateVehicleComponent  implements OnInit {
     this.clearSuccessMessage()
     this.clearErrorMessage()
 
-    this.vehicleService.getVehicleCompany().subscribe( data => {
-      this.vehicleCompanyArray = data;
+    this.updateVehicleService.getUniqueCompany().subscribe( data => {
+      this.companySelectArray = data;
     }, error => {
       if (error.message){
         this.setErrorMessage(error.message)
       }
     });
 
-
-    this.vehicleCompanyArray.forEach(s => {
-
-    })
-
   }
 
-  async onChangeCompanySelect(vehicleCompanyModel : VehicleCompanyModel ){
+  onChangeCompanySelect(company: CompanyModel ){
 
-    let tempCompanyName = vehicleCompanyModel.companyName;
-
-    this.vehicleCompanyArray.forEach( s => {
-      if (s.companyName === tempCompanyName) {
-        this.vehicleSelectArray.push(s.vehicleRegistrationNumber)
+    this.updateVehicleService.getVehicleByCompanyId(company.companyId).subscribe( data => {
+      this.vehicleSelectArray = data;
+    }, error => {
+      if (error.message){
+        this.setErrorMessage(error.message)
       }
-    })
+    });
   }
 
   clearErrorMessage(){

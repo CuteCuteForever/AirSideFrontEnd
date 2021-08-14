@@ -26,6 +26,7 @@ export class AddVehicleComponent implements OnInit {
     this.clearSuccessMessage();
 
     const vehicle: Vehicle = new Vehicle(
+      null,
       form.value.company.companyId,
       form.value.registrationNumber,
       "valid",
@@ -81,44 +82,3 @@ export class AddVehicleComponent implements OnInit {
   }
 
 }
-
-
-
-/*
-
-async onSubmit(form: NgForm) {
-  this.isError = false;
-  const value = form.value;
-
-  const vehicle: Vehicle = new Vehicle(
-    this.selectedCompany.companyID,
-    value.registrationNumber,
-    "valid",
-    new Date());
-
-  //need to check from db if transponder exist on db or not
-  let isVehicleExist = await this.addVehicleService.checkVehicleExistInDB(value.registrationNumber , "valid").toPromise().then((data: any) => {
-    return true;
-  }).catch((err: any) => {
-    return false;
-  });
-
-  if (!isVehicleExist) {
-    this.addVehicleService.insertVehicle(vehicle).subscribe({
-      next: data => {
-        this.isInserted = true
-        this.message = data.message;
-      },
-      error: error => {
-        if (error.message) {
-          return error.message;
-        }
-      }
-    })
-    form.reset();
-    console.log(vehicle);
-  } else {
-    this.isError = true;
-    this.errorMessage = "Vehicle "+value.registrationNumber +" Exist ! Please enter another vehicle."
-  }
-}*/
