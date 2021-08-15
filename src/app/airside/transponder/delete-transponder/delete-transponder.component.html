@@ -1,0 +1,52 @@
+<div class="container pt-xl-5 pt-md-2 pt-5">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <div class="alert alert-success"
+           *ngIf="isSuccessful && successMessage">
+        {{ successMessage }}
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="(isError && errorMessage)"
+      >
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container pt-xl-5 pt-md-5 pt-5">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label>Call Sign</label>
+            <ng-select [items]="transponderArray"
+                       bindLabel="callSign"
+                       placeholder="-- Select call sign to Delete --"
+                       name="transponder"
+                       (change)="onChangeCallSignSelect(transponderNG)"
+                       [(ngModel)]="transponderNG"
+                       ngModel
+                       required>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <button
+              class="btn btn-success"
+              type="submit"
+              [disabled]="!f.valid"> Delete Company </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
