@@ -1,102 +1,4 @@
-<app-admin></app-admin>
-
-<div class="container pt-xl pt-md-5 pt-5">
-  <div class="row justify-content-md-center center">
-    <div class="col-xs col-md col-md-offset-10">
-      <div class="row">
-        <h1 class="col-9">Antenna Device Information</h1>
-        <div class="col-3" *ngIf="isLoading" >
-          <small-app-loading-spinner></small-app-loading-spinner>
-        </div>
-      </div>
-
-      <div class="container pt-md-2 pt-3">
-        <div class="row align-items-start">
-          <label for="comPort">ComPort </label>
-          <div>
-            <div class= "col">
-              <input
-                type="text"
-                id="comPort"
-                class="form-control"
-                name="comPort"
-                ngModel
-                required
-                [(ngModel)]="comPortValue"
-              >
-            </div>
-          </div>
-          <div class= "col-2">
-            <button
-              class="btn btn-secondary"
-              type="Button"
-              (click)="openAntenna(f)"
-              [disabled]="!comPortValue || isContinuousScanning"
-            > Connect</button>
-          </div>
-          <div class="col-2">
-            <button
-              class="btn btn-secondary"
-              type="Button"
-              (click)="closeAntenna()"
-            > Disconnect</button>
-          </div>
-
-          <div class="col">
-            <button
-              class="btn btn-secondary"
-              type="Button"
-              (click)="offAlarm()"
-            > Off Alarm </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container pt-md-2 pt-2">
-  <div class="row justify-content-end pt-md-5 pt-5">
-
-    <div class="col">
-      <button
-        class="btn btn-success"
-        type="Button"
-        (click)="startContinousScanning()"
-        [disabled]="isContinuousScanning"
-      > Start Scanning </button>
-    </div>
-    <div class="col">
-      <button
-        class="btn btn-success"
-        type="Button"
-        [disabled]="!isContinuousScanning"
-        (click)="stopContinousScanning()"
-      > Stop Scanning </button>
-    </div>
-
-    <div class="col">
-      <button
-        class="btn btn-primary"
-        type="Button"
-        (click)="clearFields(f)"
-        [disabled]="isContinuousScanning"
-      > Clear </button>
-    </div>
-
-    <div class="col">
-      <button
-        class="btn btn-primary"
-        type="Button"
-        (click)="getData()"
-        [disabled]="!isOpenAntenna || !isOpenAntenna || isContinuousScanning"
-      > Get Data</button>
-    </div>
-  </div>
-</div>
-
-
-<div class="container pt-xl pt-md-2 pt-2">
+<div class="container pt-5">
   <div class="row justify-content-md-center">
     <div class="col-xs col-md col-md-offset-10">
       <div class="alert alert-success" *ngIf="isSuccessful && successMessage">
@@ -104,14 +6,151 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="container pt-xl pt-md-2 pt-2">
   <div class="row justify-content-md-center">
     <div class="col-xs col-md col-md-offset-10">
-      <div class="alert alert-danger" *ngIf="!isSuccessful && errorMessage">
+      <div class="alert alert-danger" *ngIf="isError && errorMessage">
         {{ errorMessage }}
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="container pt-xl pt-md-1 pt-1">
+  <div class="row justify-content-md-center">
+    <div class="row">
+      <div class="col-3" *ngIf="isLoading" >
+        <mat-spinner diameter="35"></mat-spinner>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <mat-card>
+    <div class="d-flex align-items-center">
+      ComPort :
+      <div class="col-2 mr-5">
+        <input
+          type="text"
+          id="comPort"
+          class="form-control"
+          name="comPort"
+          ngModel
+          required
+          [(ngModel)]="comPortValue"
+        >
+      </div>
+      <div class="ml-auto">
+        <button
+          class="btn btn-secondary ml-5"
+          type="Button"
+          (click)="connectAntenna(f)"
+          [disabled]="isPassiveScanning || isActiveScanning"
+        > Connect</button>
+        <button
+          class="btn btn-secondary ml-2"
+          type="Button"
+          [disabled]="isPassiveScanning || isActiveScanning"
+          (click)="disconnectAntenna()"
+        > Disconnect</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<div class="container pt-5">
+    <h4 class="example-h4"> Passive configuration</h4>
+  <div class="container pt-xl pt-md-1 pt-1">
+    <div class="row justify-content-md-center">
+      <div class="row">
+        <div class="col-3" *ngIf="isPassiveScanning" >
+          <mat-spinner diameter="35"></mat-spinner>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-card>
+    <div class="d-flex align-items-center">
+      <div class="mr-auto">
+        <section class="example-section">
+          <mat-checkbox class="example-margin" [(ngModel)]="isPassiveAntennaOne">Antenna 1</mat-checkbox>
+          <mat-checkbox class="example-margin" [(ngModel)]="isPassiveAntennaTwo">Antenna 2</mat-checkbox>
+          <mat-checkbox class="example-margin" [(ngModel)]="isPassiveAntennaThree">Antenna 3</mat-checkbox>
+          <mat-checkbox class="example-margin" [(ngModel)]="isPassiveAntennaFour">Antenna 4</mat-checkbox>
+        </section>
+      </div>
+      <div class="ml-auto">
+        <button
+          class="btn btn-success mr-3"
+          type="Button"
+          (click)="startPassiveScan()"
+          [disabled]="isPassiveScanning || !isOpenAntenna"
+        > Start Passive </button>
+        <button
+          class="btn btn-success mr-3"
+          type="Button"
+          [disabled]="!isPassiveScanning || !isOpenAntenna"
+          (click)="stopPassiveScan()"
+        > Stop</button>
+        <button
+          class="btn btn-success"
+          type="Button"
+          (click)="offAlarm()"
+          [disabled]="!isOpenAntenna"
+        > Off Alarm </button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+
+<div class="container pt-5">
+  <h4 class="example-h4"> Active configuration</h4>
+  <mat-card>
+    <div class="d-flex align-items-center">
+      <div class="mr-auto">
+        <section class="example-section">
+          <mat-checkbox class="example-margin" [(ngModel)]="isActiveAntennaOne">Antenna 1</mat-checkbox>
+          <mat-checkbox class="example-margin" [(ngModel)]="isActiveAntennaOne">Antenna 2</mat-checkbox>
+          <mat-checkbox class="example-margin" [(ngModel)]="isActiveAntennaOne">Antenna 3</mat-checkbox>
+          <mat-checkbox class="example-margin" [(ngModel)]="isActiveAntennaOne">Antenna 4</mat-checkbox>
+        </section>
+      </div>
+      <div class="ml-auto">
+        <button
+          class="btn btn-success mr-3"
+          type="Button"
+          (click)="startContinousScanning()"
+          [disabled]="isContinuousScanning || !isOpenAntenna"
+        > Start Active </button>
+        <button
+          class="btn btn-success"
+          type="Button"
+          [disabled]="!isContinuousScanning || !isOpenAntenna"
+          (click)="stopContinousScanning()"
+        > Stop</button>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+
+
+<div class="container pt-5">
+  <div class="d-flex flex-gap align-items-center pt-4">
+    <div class="ml-auto">
+      <button
+        class="btn btn-primary mr-2"
+        type="Button"
+        (click)="getData()"
+        [disabled]="!isOpenAntenna || !isOpenAntenna || isContinuousScanning"
+      > Get Data</button>
+      <button
+        class="btn btn-primary"
+        type="Button"
+        (click)="clearFields(f)"
+        [disabled]="isContinuousScanning || !isOpenAntenna"
+      > Clear </button>
     </div>
   </div>
 </div>
@@ -122,9 +161,8 @@
   <div class="row center">
     <div class="col-xs col-md col-md-offset-10">
       <form (ngSubmit)="onSubmit(f)" #f="ngForm">
-
         <div class="row pt-xl pt-md-4 pt-4">
-          <div class="col-sm form-group">
+          <div class="col">
             <label for="serialNumber">Serial Number</label>
             <input
               type="text"
@@ -137,7 +175,7 @@
               [disabled]="true"
             >
           </div>
-          <div class="col-sm form-group">
+          <div class="col">
             <label for="versionInformation">Version Information</label>
             <input
               type="text"
@@ -150,10 +188,7 @@
               [disabled]="true"
             >
           </div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm form-group">
+          <div class="col">
             <label for="rfPower">RF PowerdBm (0-30)</label>
             <input
               type="number"
@@ -165,7 +200,10 @@
               [(ngModel)]="rfPowerValue"
             >
           </div>
-          <div class="col-sm form-group">
+        </div>
+
+        <div class="row pt-4">
+          <div class="col">
             <label for="drm">DRM ( 0= disable , 1= Enable)</label>
             <input
               type="number"
@@ -177,7 +215,7 @@
               [(ngModel)]="drmValue"
             >
           </div>
-          <div class="col-sm form-group">
+          <div class="col">
             <label for="beepStatus">Beep Enable ( 0= disable , 1= Enable)</label>
             <input
               type="number"
@@ -189,10 +227,7 @@
               [(ngModel)]="beepStatusValue"
             >
           </div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm-3 form-group">
+          <div class="col">
             <label for="readerTemperature">Reader Temperature (Degree Celsius)</label>
             <input
               type="text"
@@ -206,18 +241,17 @@
             >
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-sm-10 form-group">
+        <div class="row pt-3">
+          <div class="col">
             <button
               class="btn btn-success"
               type="submit"
               [disabled]="!f.valid || !isOpenAntenna"
-            > Update </button>
+            > Update Parameters</button>
           </div>
         </div>
       </form>
-
     </div>
   </div>
 </div>
+

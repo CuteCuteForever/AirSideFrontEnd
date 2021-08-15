@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RFIDServiceService } from './rfidservice.service';
+import { RFIDService } from './r-f-i-d.service';
 
 describe('RFIDServiceService', () => {
-  let service: RFIDServiceService;
+  let service: RFIDService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RFIDServiceService);
+    service = TestBed.inject(RFIDService);
   });
 
   it('should be created', () => {

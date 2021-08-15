@@ -1,5 +1,7 @@
-export class Company {
+export class CompanyModel {
   constructor(
+              public companyRowId: string | null,
+              public companyId: string | null,
               public companyName: string,
               public address: string,
               public contactPersonName: string,

@@ -22,7 +22,9 @@
       <form (ngSubmit)="onSubmit(f)" #f="ngForm">
         <div class="row">
           <div class="col-sm">
-            <button class="btn btn-primary" type="Button" (click)="EPCButtonPress(f);">
+            <button class="btn btn-primary" type="Button"
+                    [disabled]="!isRFIDConnectedNow || isScanningEPC"
+                    (click)="EPCButtonPress(f);">
               Scan
             </button>
           </div>

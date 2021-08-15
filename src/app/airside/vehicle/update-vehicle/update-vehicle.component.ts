@@ -27,8 +27,6 @@ export class UpdateVehicleComponent  implements OnInit {
   vehicleSelectArray : VehicleModel[];
   companySelectArray : CompanyModel[];
 
-
-
   onSubmit(form: NgForm) {
 
     this.clearErrorMessage();
@@ -36,12 +34,15 @@ export class UpdateVehicleComponent  implements OnInit {
 
 
     const vehicle: VehicleModel = new VehicleModel(
+      this.vehicleSelected.vehicleRowId,
       this.vehicleSelected.vehicleId,
       this.companySelected.companyId,
       this.registrationNG,
       "valid",
       new Date()
     );
+
+    console.log(vehicle)
 
     this.updateVehicleService.updateVehicle(vehicle).subscribe(
       (data : any) => {
@@ -81,6 +82,10 @@ export class UpdateVehicleComponent  implements OnInit {
         this.setErrorMessage(error.message)
       }
     });
+  }
+
+  onChangeVehicleSelect(vehicleModel: VehicleModel ){
+    this.vehicleSelected = vehicleModel;
   }
 
   clearErrorMessage(){

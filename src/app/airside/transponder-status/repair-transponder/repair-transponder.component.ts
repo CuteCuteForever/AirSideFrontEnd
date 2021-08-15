@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Transponder} from "../../airside/transponder-status/borrow-transponder/transponder.model";
+import {TransponderModel} from "./transponder.model";
 import {Subscription} from "rxjs";
 import {TransponderStatusService} from "./transponder-status.service";
-import {RFIDServiceService} from "../../airside/rfid/rfidservice.service";
+import {RFIDService} from "../../rfid/r-f-i-d.service";
 import {NgForm} from "@angular/forms";
-import {ReturnTransponderModel} from "../return-transponder/return-transponder.model";
 import {RepairTransponderModel} from "./repair-transponder.model";
 
 @Component({
@@ -19,7 +18,7 @@ export class RepairTransponderComponent implements OnInit {
   isError = false;
   errorMessage : string;
 
-  transponderArray: Transponder[];
+  transponderArray: TransponderModel[];
   subscription: Subscription;
 
   isRFIDConnectedNow = false;
@@ -27,7 +26,7 @@ export class RepairTransponderComponent implements OnInit {
   transponderID : string;
   size : number = 0;
 
-  constructor(private transponderStatusService : TransponderStatusService  , private rfidService : RFIDServiceService) { }
+  constructor(private transponderStatusService : TransponderStatusService  , private rfidService : RFIDService) { }
 
   ngOnInit() {
 
@@ -37,7 +36,7 @@ export class RepairTransponderComponent implements OnInit {
 
     this.subscription = this.transponderStatusService.transponderSubject
       .subscribe(
-        (transponderArray: Transponder[]) => {
+        (transponderArray: TransponderModel[]) => {
           this.transponderArray = transponderArray;
         }
       );
@@ -62,7 +61,7 @@ export class RepairTransponderComponent implements OnInit {
 
     let repairTransponderModelArray : RepairTransponderModel[] = [];
 
-    this.transponderArray.forEach( (transponder : Transponder) =>  {
+    this.transponderArray.forEach( (transponder : TransponderModel) =>  {
 
       let repairTransponderModel : RepairTransponderModel = new RepairTransponderModel(
         transponder.epc,
@@ -85,33 +84,28 @@ export class RepairTransponderComponent implements OnInit {
     form.reset();
   }
 
-  EPCButtonPress(form: NgForm){
+  async EPCButtonPress(form: NgForm){
+
+    this.isScanningEPC = true;
 
     this.clearErrorMessage();
     this.clearSuccessMessage();
 
-    let transponderModel: Transponder ;
+    let transponderModel: TransponderModel ;
 
-    if (!this.isScanningEPC){
+    await this.transponderStatusService.scanEPC().toPromise().then((data: any) => {
+      this.isScanningEPC = false;
+      transponderModel = data;
+    }, (error: any) => {
+      this.setErrorMessage(error.error.message)
+      this.isScanningEPC = false;
+    })
 
-      this.isScanningEPC = true;
-
-      this.transponderStatusService.scanEPC().subscribe((data: Transponder) => {
-        this.isScanningEPC = false;
-        transponderModel = data;
-      }, (error: any) => {
-        console.log(error.error.message)
-        this.setErrorMessage(error.error.message)
-      })
-
-      // @ts-ignore
-      if (transponderModel !== undefined) {
-        this.transponderStatusService.addTransponderToTransponderModelArray(transponderModel);
-      }
-      this.size = this.transponderStatusService.getTransponderArray().length;
+    // @ts-ignore
+    if (transponderModel !== undefined) {
+      this.transponderStatusService.addTransponderToTransponderModelArray(transponderModel);
     }
-
-    this.isScanningEPC = false;
+    this.size = this.transponderStatusService.getTransponderArray().length;
   }
 
   clearErrorMessage(){

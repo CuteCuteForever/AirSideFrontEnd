@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {Subject} from "rxjs";
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class RFIDServiceService {
+export class RFIDService {
 
   isRFIDConnected = false;
+  desktopReaderConnectedStatusEmitter = new Subject<boolean>();
 
   private REST_API_SERVER = "http://localhost:8080/";
 
@@ -18,11 +20,11 @@ export class RFIDServiceService {
   }
 
   getDeviceParam(index : number) {
-    return this.httpClient.get(this.REST_API_SERVER+"rfidreaddeviceoneparam/"+index);
+    return this.httpClient.get(this.REST_API_SERVER+"rfidReadDeviceOneParam/"+index);
   }
 
   updateDeviceParam(index : number , value : number) {
-    return this.httpClient.get(this.REST_API_SERVER+"rfidupdatedeviceoneparam/"+index+"/"+value);
+    return this.httpClient.get(this.REST_API_SERVER+"rfidUpdateDeviceOneParam/"+index+"/"+value);
   }
 
   openRFIDCardReader(){

@@ -1,6 +1,6 @@
-//insert
 export class TransponderStatusModel {
   constructor(
+    public transponderStatusId: null,
     public epc: string,
     public companyId: string,
     public out_timestamp: Date,

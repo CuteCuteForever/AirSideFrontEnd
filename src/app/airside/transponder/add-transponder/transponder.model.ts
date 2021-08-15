@@ -1,12 +1,14 @@
 //insert model
-export class Transponder {
+export class TransponderModel {
   constructor(
+    public transponderRowId: string | null,
+    public transponderId: string | null,
     public callSign: string,
     public serialNumber: string,
     public serviceAvailability: string,
     public description: string,
-    public warrantyFromDate : string,
-    public warrantyToDate : string,
+    public warrantyFromDate : Date,
+    public warrantyToDate : Date,
     public epc: string,
     public rowRecordStatus: string,
     public timestamp : Date

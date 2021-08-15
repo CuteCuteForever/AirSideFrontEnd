@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {RegisterTransponderService} from "./register-transponder.service";
-import {Transponder} from "./transponder.model";
-import {RFIDServiceService} from "../../airside/rfid/rfidservice.service";
+import {AddTransponderService} from "./add-transponder.service";
+import { TransponderModel} from "./transponder.model";
+import {RFIDService} from "../../rfid/r-f-i-d.service";
 
 const REST_API_SERVER = 'http://localhost:8080/';
 
 @Component({
   selector: 'app-register-transponder',
-  templateUrl: './register-transponder.component.html',
-  styleUrls: ['./register-transponder.component.css']
+  templateUrl: './add-transponder.component.html',
+  styleUrls: ['./add-transponder.component.css']
 })
 export class AddTransponderComponent implements OnInit {
 
@@ -19,11 +19,8 @@ export class AddTransponderComponent implements OnInit {
   errorMessage : string;
 
   isRFIDConnectedNow = false;
-  epcBtnValue = "Start Scan";
   isScanningEPC = false;
-  companyID : number;
-  epcTxtBoxValue : string ;
-  selectedServiceAvailability : any;
+  epcNG : string ;
   size : string
 
   serviceAvailabilityArray =  [
@@ -31,11 +28,10 @@ export class AddTransponderComponent implements OnInit {
     {id: 2, value: 'Not Spare'},
   ];
 
-
-  constructor(private registerTransponderService : RegisterTransponderService , private rfidService : RFIDServiceService) { }
+  constructor(private registerTransponderService : AddTransponderService , private rfidService : RFIDService) { }
 
   ngOnInit() {
-    this.epcTxtBoxValue = "E20030340404010"
+    //this.epcNG = "E20030340404010"
     this.isRFIDConnectedNow = this.rfidService.isRFIDConnected ;
 
     if (!this.isRFIDConnectedNow) {
@@ -56,24 +52,28 @@ export class AddTransponderComponent implements OnInit {
 
      if (!this.isError) {
 
-     const transponder: Transponder = new Transponder(
+     const transponder: TransponderModel = new TransponderModel(
+       null,
+       null,
        form.value.callSign,
        form.value.serialNumber,
-       this.selectedServiceAvailability.value,
+       form.value.serviceAvailability.value,
        form.value.description,
        form.value.warrantyFromDate,
        form.value.warrantyToDate,
-       this.epcTxtBoxValue,
+       //"E20030340404010",
+       this.epcNG,
        "valid",
        new Date());
 
+     console.log(transponder)
      this.registerTransponderService.insertTransponder(transponder).subscribe({
        next: data => {
          this.setSuccessMessage(data.message);
        },
        error: error => {
-         if (error.error.message) {
-           this.setErrorMessage(error.error.message);
+         if (error) {
+           this.setErrorMessage(error);
          }
        }
      })
@@ -88,17 +88,14 @@ export class AddTransponderComponent implements OnInit {
     if (!this.isScanningEPC){
 
       this.isScanningEPC = true;
-      this.epcBtnValue = "Scanning";
 
       this.registerTransponderService.scanEPC().subscribe( (data : any) => {
-
-        this.epcTxtBoxValue = data.message ;
-        this.epcBtnValue = "Start Scan";
+        this.epcNG = data.message ;
         this.isScanningEPC = false
       }, error => {
         if (error.error.message){
           this.setErrorMessage(error.error.message)
-          console.log(error.message)
+          console.log(error)
         }
         this.isScanningEPC = false
       });

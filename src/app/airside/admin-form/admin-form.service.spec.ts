@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TransactionService } from './transaction.service';
+import { AdminFormService } from './admin-form.service';
 
 describe('TransactionService', () => {
-  let service: TransactionService;
+  let service: AdminFormService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(TransactionService);
+    service = TestBed.inject(AdminFormService);
   });
 
   it('should be created', () => {

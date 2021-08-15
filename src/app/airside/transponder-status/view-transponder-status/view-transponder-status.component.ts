@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {Transponder} from "../../airside/transponder/view-transponder/transponder.model";
+import {Transponder} from "../../transponder/view-transponder/transponder.model";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {FormControl} from "@angular/forms";
@@ -15,10 +15,10 @@ import {TransponderStatusModel} from "./transponder-status.model";
 export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
 
   displayedColumns: string[] = [
-    'callSign',
-    'serialNumber',
     'outTimestamp',
     'inTimestamp',
+    'callSign',
+    'serialNumber',
     'duration',
     'rentalDuration',
     'transponderStatus',
@@ -55,9 +55,10 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
   ];
 
   transponderStatusSources =  [
-    {display: 'Available', value: 'Available'},
     {display: 'Rent Out', value: 'Rent Out'},
+    {display: 'Returned', value: 'Returned'},
     {display: 'Repair', value: 'Repair'},
+    {display: 'Serviced', value: 'Serviced'},
   ];
 
   dueNoticeSources =  [
@@ -68,11 +69,14 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     callSign: '',
     rowRecordStatus: '',
     rentalDuration: '',
-    transponderStatus:''
+    transponderStatus: '',
+    dueNotice : ''
   }
 
   constructor(private route: ActivatedRoute) {
     this.transponderStatusArray = this.route.snapshot.data.viewTransponderStatus;
+
+    console.log(this.transponderStatusArray)
     this.dataSource = new MatTableDataSource(this.transponderStatusArray);
     this.dataSource.filterPredicate = this.createFilter();
   }
@@ -112,7 +116,8 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
 
     this.dueNoticeFilter.valueChanges.subscribe(
       s => {
-        this.filterValues.dueSoon = s;
+        this.filterValues.dueNotice = s;
+        console.log(s)
         this.dataSource.filter = JSON.stringify(this.filterValues);
         this.size = this.dataSource.filteredData.length
       }
@@ -120,6 +125,7 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
 
     this.rentalDurationFilter.valueChanges.subscribe(
       s => {
+        console.log(s)
         this.filterValues.rentalDuration = s;
         this.dataSource.filter = JSON.stringify(this.filterValues);
         this.size = this.dataSource.filteredData.length
@@ -143,12 +149,19 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     // @ts-ignore
     let filterFunction = function (transponderStatusModel, filter): boolean {
       let searchTerms = JSON.parse(filter);
-      console.log(filter)
+
+      console.log("AAAA "+searchTerms.transponderStatus)
+      console.log("BBBB "+transponderStatusModel.transponderStatus)
+      console.log(transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0)
+
       return transponderStatusModel.callSign.toLowerCase().indexOf(searchTerms.callSign.toLowerCase()) !== -1
-        && transponderStatusModel.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0
+      && transponderStatusModel.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0
+      && transponderStatusModel.dueNotice.toLowerCase().indexOf(searchTerms.dueNotice.toLowerCase()) == 0
         && transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
-        && searchTerms.dueSoon === "" ? true : (transponderStatusModel.dueSoon ? transponderStatusModel.dueSoon.toLowerCase().indexOf(searchTerms.dueSoon.toLowerCase()) === 0 : false)
-        && searchTerms.rentalDuration === "" ? true : (transponderStatusModel.rentalDuration ? transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0 : false);
+     // && transponderStatusModel.rentalDuration === null && searchTerms.rentalDuration.toLowerCase() === "" ? true : (transponderStatusModel.rentalDuration === null ? false : transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0)
+
+      //&& transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
+     //  ;
     }
     return filterFunction;
   }

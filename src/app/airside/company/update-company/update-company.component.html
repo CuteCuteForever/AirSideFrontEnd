@@ -1,0 +1,113 @@
+<div class="container pt-xl-5 pt-md-2 pt-5">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <div class="alert alert-success"
+           *ngIf="isSuccessful && successMessage">
+        {{ successMessage }}
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="(isError && errorMessage)"
+      >
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container pt-xl-3 pt-md-3 pt-3">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label>Company</label>
+            <ng-select [items]="companyArray"
+                       bindLabel="companyName"
+                       placeholder="-- Select Company to Update --"
+                       name="company"
+                       [(ngModel)]="company"
+                       (change)="onChangeCompanySelect(company)"
+                       ngModel
+                       required>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label for="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              class="form-control"
+              name="address"
+              ngModel
+              required
+              [(ngModel)]="addressNG"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label for="contactPerson">Contact Person</label>
+            <input
+              type="text"
+              id="contactPerson"
+              class="form-control"
+              name="contactPerson"
+              ngModel
+              required
+              [(ngModel)]="contactPersonNG"
+            >
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label for="contactNumber">Contact Number</label>
+            <input
+              type="text"
+              id="contactNumber"
+              class="form-control"
+              name="contactNumber"
+              ngModel
+              required
+              [(ngModel)]="contactNumberNG"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label for="department">Department</label>
+            <input
+              type="text"
+              id="department"
+              class="form-control"
+              name="department"
+              ngModel
+              required
+              [(ngModel)]="departmentNG"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <button
+              class="btn btn-success"
+              type="submit"
+              [disabled]="!f.valid"> Update Company </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

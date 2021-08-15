@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddTransponderComponent } from './register-transponder.component';
+import { AddTransponderComponent } from './add-transponder.component';
 
 describe('RegisterTransponderComponent', () => {
   let component: AddTransponderComponent;

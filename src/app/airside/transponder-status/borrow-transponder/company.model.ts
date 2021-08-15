@@ -1,6 +1,6 @@
 export class Company {
   constructor(
-    public companyId: string,
+    public companyId: string | null,
     public companyName: string,
     public address: string,
               public contactPersonName: string,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RFIDServiceService } from './rfidservice.service';
+import { RFIDService } from './r-f-i-d.service';
 import {NgForm} from "@angular/forms";
 import {concat, forkJoin, Subject, Subscription} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
@@ -20,15 +20,14 @@ function sleep(milliseconds : any) {
 })
 export class RFIDComponent implements OnInit {
 
-  subscription: Subscription
-  private REST_API_SERVER = "http://localhost:8080/";
 
-  constructor(private rfidService: RFIDServiceService, private httpClient: HttpClient) {
+  constructor(private rfidService: RFIDService, private httpClient: HttpClient) {
   }
 
   isLoading = false;
 
-  isSuccessful = true;
+  isError = false;
+  isSuccessful = false;
   successMessage: string = "";
   errorMessage :string ="";
 
@@ -45,18 +44,18 @@ export class RFIDComponent implements OnInit {
   ERROR_CONNECT_DISCONNECT : string = "An error occurred. Please close RFID Card Reader and initialize again";
 
   ngOnInit(): void {
-    this.isLoading = false;
-
+/*
     if (!this.isOpenRFIDReader) {
-      this.errorMessage ="Please refrain from placing RFID tags on Card Reader upon connecting."
-      this.isSuccessful = false;
-    }
+      this.setErrorMessage("Please refrain from placing RFID tags on Card Reader upon connecting.")
+    }*/
   }
 
 
   async getData() {
 
-    this.isSuccessful = true;
+    this.clearErrorMessage()
+    this.clearSuccessMessage()
+
     this.isLoading = true;
 
     if (this.isOpenRFIDReader) {
@@ -65,9 +64,7 @@ export class RFIDComponent implements OnInit {
           return result.message
         }
       } , (error : any) => {
-        this.isSuccessful = false
-        this.errorMessage = error.message
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
+        this.setErrorMessage(this.ERROR_CONNECT_DISCONNECT);
       });
     }
 
@@ -77,8 +74,7 @@ export class RFIDComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
+        this.setErrorMessage(this.ERROR_CONNECT_DISCONNECT);
       });
     }
 
@@ -89,9 +85,7 @@ export class RFIDComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        this.errorMessage = error.message
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
+        this.setErrorMessage(this.ERROR_CONNECT_DISCONNECT);
       });
     }
 
@@ -102,8 +96,7 @@ export class RFIDComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
+        this.setErrorMessage(this.ERROR_CONNECT_DISCONNECT);
       });
     }
 
@@ -113,8 +106,7 @@ export class RFIDComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
+        this.setErrorMessage(this.ERROR_CONNECT_DISCONNECT);
       });
     }
 
@@ -124,8 +116,7 @@ export class RFIDComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
+        this.setErrorMessage(this.ERROR_CONNECT_DISCONNECT);
       });
     }
 
@@ -135,8 +126,7 @@ export class RFIDComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
+        this.setErrorMessage(this.ERROR_CONNECT_DISCONNECT);
       });
     }
 
@@ -166,19 +156,22 @@ export class RFIDComponent implements OnInit {
   }
 
   openRFIDCardReader() {
-    this.isOpenRFIDReader = true;
-    this.successMessage = "";
+
     this.isLoading = true;
+    this.isOpenRFIDReader = true;
+
+    this.clearSuccessMessage()
+    this.clearErrorMessage()
+
     this.rfidService.openRFIDCardReader().subscribe((data: any) => {
+      this.setSuccessMessage(data.message);
       this.isLoading = false;
-      this.successMessage = data.message
-      this.isSuccessful = true;
-    }, error => {
-      if (error){
-        this.isSuccessful = false;
-        this.errorMessage = this.ERROR_CONNECT_DISCONNECT
-      }
+      this.rfidService.desktopReaderConnectedStatusEmitter.next(true);
+    }, (error :any) => {
+      this.setErrorMessage(error.error.message);
+      this.isLoading = false;
     });
+
   }
 
   clearFields(form : NgForm){
@@ -186,18 +179,43 @@ export class RFIDComponent implements OnInit {
   }
 
   closeRFIDCardReader(){
-    this.isOpenRFIDReader = false;
-    this.successMessage = "";
-    this.isLoading = true;
-    this.rfidService.closeRFIDCardReader().subscribe((data: any) => {
 
+    this.isLoading = true;
+    this.clearErrorMessage()
+    this.clearSuccessMessage()
+    this.isOpenRFIDReader = false;
+
+    this.rfidService.closeRFIDCardReader().subscribe((data: any) => {
+      this.setSuccessMessage(data.message)
       this.isLoading = false;
-      this.isSuccessful = true;
-      if (data){
-        this.successMessage = data.message
-      }
+      this.rfidService.desktopReaderConnectedStatusEmitter.next(false);
     }, error => {
+      this.setErrorMessage(error.error.message)
+      this.isLoading = false;
     });
+
+
+
+  }
+
+  clearErrorMessage(){
+    this.isError = false;
+    this.errorMessage = "";
+  }
+
+  setErrorMessage(errorMessage : string) {
+    this.isError = true;
+    this.errorMessage = errorMessage;
+  }
+
+  setSuccessMessage(successMessage : string) {
+    this.isSuccessful = true;
+    this.successMessage = successMessage;
+  }
+
+  clearSuccessMessage() {
+    this.isSuccessful = true;
+    this.successMessage = "";
   }
 }
 

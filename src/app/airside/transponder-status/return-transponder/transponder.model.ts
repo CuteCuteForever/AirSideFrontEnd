@@ -1,5 +1,5 @@
 
-export class Transponder {
+export class TransponderModel {
   constructor(
     public transponderId: string,
     public callSign: string,

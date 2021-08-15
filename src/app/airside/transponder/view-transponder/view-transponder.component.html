@@ -1,48 +1,49 @@
 
-<div class="overflow-auto">
 
-  <mat-expansion-panel (opened)="panelOpenState = true"
-                       (closed)="panelOpenState = false">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{panelOpenState ? 'Close Filter Window' : 'Open Filter Window'}}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
 
-    <div class="row">
-      <div class="vertical-form-field">
-        <div class="col">
-          <mat-form-field appearance="fill" class="no-label-field">
-            <mat-label>Call Sign</mat-label>
-            <input matInput placeholder="" value="" [formControl]="callSignFilter">
-          </mat-form-field>
-        </div>
-      </div>
+<mat-expansion-panel (opened)="panelOpenState = true"
+                     (closed)="panelOpenState = false">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{panelOpenState ? 'Close Filter Window' : 'Open Filter Window'}}
+    </mat-panel-title>
+  </mat-expansion-panel-header>
 
+  <div class="row">
+    <div class="vertical-form-field">
       <div class="col">
-        <div class="vertical-form-field">
-            <mat-form-field appearance="fill" class="no-label-field">
-              <mat-select [formControl]="rowRecordStatusFilter">
-                <mat-option value="">-- Row Record Status --</mat-option>
-                <mat-option *ngFor="let status of rowRecordStatusSources" [value]="status.value">
-                  {{status.display}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-        </div>
+        <mat-form-field appearance="fill" class="no-label-field">
+          <mat-label>Call Sign</mat-label>
+          <input matInput placeholder="" value="" [formControl]="callSignFilter">
+        </mat-form-field>
       </div>
     </div>
 
-    <div>
-      <button mat-raised-button color="primary" (click)="clearFilter()">Clear Filter</button>
+    <div class="col">
+      <div class="vertical-form-field">
+        <mat-form-field appearance="fill" class="no-label-field">
+          <mat-select [formControl]="rowRecordStatusFilter">
+            <mat-option value="">-- Row Record Status --</mat-option>
+            <mat-option *ngFor="let status of rowRecordStatusSources" [value]="status.value">
+              {{status.display}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
     </div>
+  </div>
 
-  </mat-expansion-panel>
+  <div>
+    <button mat-raised-button color="primary" (click)="clearFilter()">Clear Filter</button>
+  </div>
 
+</mat-expansion-panel>
+
+<div class="overflow-auto">
   <div class="container-fluid">
     <div class="pt-4 pt-md-4 pt-4">
-    <button mat-raised-button>Total Records : {{ size }}</button>
+      <button mat-raised-button>Total Records : {{ size }}</button>
     </div>
     <div class="pt-xl-4 pt-md-4 pt-4">
       <table mat-table [dataSource]="dataSource" matSort matSortActive="created" matSortDisableClear matSortDirection="desc">

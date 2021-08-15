@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Transponder} from "./transponder.model";
+import {TransponderModel} from "./transponder.model";
+import {Company} from "../../company/add-company/company.model";
 
 
 const REST_API_SERVER = 'http://localhost:8080/';
@@ -8,16 +9,16 @@ const REST_API_SERVER = 'http://localhost:8080/';
 @Injectable({
   providedIn: 'root'
 })
-export class RegisterTransponderService {
+export class AddTransponderService {
 
   constructor(private http: HttpClient) { }
 
-  insertTransponder(transponder : Transponder){
-    return this.http.post<any>(REST_API_SERVER+'insertTransponder' , transponder) ;
+  insertTransponder(transponderModel : TransponderModel){
+    return this.http.post<any>(REST_API_SERVER+'insertTransponder' , transponderModel) ;
   }
 
   scanEPC(){
-    return this.http.get(REST_API_SERVER+'rfidscan');
+    return this.http.get(REST_API_SERVER+'rfidScanNewTransponder');
   }
 
   getTransponderByEPCAndRowRecordStatus(epcNumber : string , rowRecordStatus : string){

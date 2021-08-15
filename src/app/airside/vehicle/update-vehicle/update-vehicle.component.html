@@ -45,6 +45,7 @@
                        placeholder="-- Select registration number --"
                        name="registrationNumber"
                        [(ngModel)]="vehicleSelected"
+                       (change)="onChangeVehicleSelect(vehicleSelected)"
                        ngModel
                        required>
             </ng-select>

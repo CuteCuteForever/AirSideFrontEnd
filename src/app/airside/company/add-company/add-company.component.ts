@@ -26,6 +26,8 @@ export class AddCompanyComponent implements OnInit {
     this.clearSuccessMessage()
 
     const newCompany : Company = new Company(
+      null,
+      null,
       form.value.companyName,
       form.value.coyAddress ,
       form.value.contactPerson ,
@@ -35,7 +37,7 @@ export class AddCompanyComponent implements OnInit {
       new Date()
     );
 
-
+    console.log(newCompany)
     this.companyService.insertCompany(newCompany).subscribe(
       (data : any) => {
         this.setSuccessMessage(data.message)

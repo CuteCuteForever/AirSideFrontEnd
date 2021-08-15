@@ -1,0 +1,140 @@
+<div class="container pt-xl-5 pt-md-2 pt-5">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-7 col-md-offset-7">
+      <div class="alert alert-success"
+           *ngIf="isSuccessful && successMessage">
+        {{ successMessage }}
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="(isError && errorMessage)"
+      >
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container pt-xl-3 pt-md-3 pt-3">
+  <div class="row justify-content-md-center center">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label>Call Sign</label>
+            <ng-select [items]="transponderArray"
+                       bindLabel="callSign"
+                       placeholder="-- Select call sign to Update --"
+                       name="transponder"
+                       [(ngModel)]="transponder"
+                       (change)="onChangeCallSignSelect(transponder)"
+                       ngModel
+                       required>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label for="epc">RFID Tag</label>
+            <input
+              type="text"
+              id="epc"
+              class="form-control"
+              name="epc"
+              ngModel
+              required
+              [(ngModel)]="epcNG"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <label for="description">Description</label>
+            <input
+              type="text"
+              id="description"
+              class="form-control"
+              name="description"
+              ngModel
+              required
+              [(ngModel)]="descriptionNG"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <mat-form-field>
+              <input
+                matInput
+                id="warrantyFromDate"
+                name="warrantyFromDate"
+                [matDatepicker]="pickerFromDate"
+                ngModel
+                [(ngModel)]="warrantyFromDateNG"
+                placeholder="Warranty From Date">
+              <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFromDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                id="warrantyToDate"
+                name="warrantyToDate"
+                [matDatepicker]="pickerToDate"
+                [(ngModel)]="warrantyToDateNG"
+                ngModel
+                placeholder="Warranty To Date">
+              <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
+              <mat-datepicker #pickerToDate></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <label for="serialNumber">Serial Number</label>
+            <input
+              type="text"
+              id="serialNumber"
+              class="form-control"
+              name="serialNumber"
+              ngModel
+              required
+              [(ngModel)]="serialNumberNG"
+            >
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-8 form-group">
+            <label >Service Availability</label>
+            <ng-select [items]="serviceAvailabilityArray"
+                       bindLabel="value"
+                       placeholder="Select"
+                       appendTo="body"
+                       name="serviceAvailability"
+                       [(ngModel)]="serviceAvailabilityNG">
+            </ng-select>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-10 form-group">
+            <button
+              class="btn btn-success"
+              type="submit"
+              [disabled]="!f.valid"> Update Transponder </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

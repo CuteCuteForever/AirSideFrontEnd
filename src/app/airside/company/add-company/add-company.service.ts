@@ -19,8 +19,5 @@ export class companyService {
     return this.http.post<any>(REST_API_SERVER+'insertCompany' , companyModel) ;
   }
 
-  checkCompanyExistInDB(companyName : string , rowRecordStatus : string){
-    return this.http.get<any>(REST_API_SERVER+'company'+"/"+companyName+"/"+rowRecordStatus)
-  }
 
 }

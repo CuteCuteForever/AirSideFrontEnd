@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {TransponderStatusService} from "./transponder-status.service";
-import {RFIDServiceService} from "../../rfid/rfidservice.service";
-import {AddTransponderService} from "../add-transponder/add-transponder.service";
-import {Transponder} from "./transponder.model";
+import {RFIDService} from "../../rfid/r-f-i-d.service";
+import {AddTransponderService} from "../../transponder/add-transponder/add-transponder.service";
+import {TransponderModel} from "./transponder.model";
 import {Subscription} from "rxjs";
 import {Company} from "./company.model";
 import {Vehicle} from "./vehicle.model";
 import {NgForm} from "@angular/forms";
 import {TransponderStatusModel} from "./transponder-status.model";
-import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-borrow-transponder',
@@ -22,7 +21,7 @@ export class BorrowTransponderComponent implements OnInit {
   isError = false;
   errorMessage = ""
 
-  transponderArray: Transponder[];
+  transponderArray: TransponderModel[];
   subscription: Subscription;
 
   isScanningEPC = false;
@@ -41,7 +40,7 @@ export class BorrowTransponderComponent implements OnInit {
     {id: 4, value: 'Yearly'},
   ];
 
-  constructor(private transponderStatusService : TransponderStatusService , private rfidService : RFIDServiceService ) { }
+  constructor(private transponderStatusService : TransponderStatusService , private rfidService : RFIDService ) { }
 
   ngOnInit() {
 
@@ -51,7 +50,7 @@ export class BorrowTransponderComponent implements OnInit {
 
     this.subscription = this.transponderStatusService.transponderSubject
       .subscribe(
-        (transponderArray: Transponder[]) => {
+        (transponderArray: TransponderModel[]) => {
           this.transponderArray = transponderArray;
         }
       );
@@ -85,16 +84,17 @@ export class BorrowTransponderComponent implements OnInit {
     this.transponderStatusService.deleteEPC(this.transponderArray.length-1);
   }
 
-   onSubmit(form: NgForm) {
+  onSubmit(form: NgForm) {
 
     this.clearErrorMessage();
     this.clearSuccessMessage();
 
     let transponderStatusModelArray : TransponderStatusModel[] = [];
 
-    this.transponderArray.forEach( (transponder : Transponder) =>  {
+    this.transponderArray.forEach( (transponder : TransponderModel) =>  {
 
       let transponderStatusModel : TransponderStatusModel = new TransponderStatusModel(
+        null,
         transponder.epc,
         form.value.company.companyId,
         new Date(),
@@ -105,10 +105,12 @@ export class BorrowTransponderComponent implements OnInit {
         form.value.vehicle.vehicleId,
         "valid",
         new Date());
-
-       transponderStatusModelArray.push(transponderStatusModel);
+      transponderStatusModelArray.push(transponderStatusModel);
 
     });
+
+
+    console.log(transponderStatusModelArray)
 
     this.transponderStatusService.insertBorrowTransponderStatus(JSON.stringify(transponderStatusModelArray)).subscribe( (data : any) =>{
       this.setSuccessMessage(data.message)
@@ -119,37 +121,37 @@ export class BorrowTransponderComponent implements OnInit {
       }
     });
 
-     form.reset();
+    form.reset();
   }
 
-  EPCButtonPress(form: NgForm) {
+  async EPCButtonPress(form: NgForm) {
+
+    this.isScanningEPC = true;
 
     this.clearErrorMessage();
     this.clearSuccessMessage();
 
-    let transponderModel: Transponder ;
+    let transponderModel: TransponderModel ;
 
-    if (!this.isScanningEPC) {
+    await this.transponderStatusService.scanEPC().toPromise().then((data: any) => {
+      console.log(data)
+      this.isScanningEPC = false;
+      transponderModel = data;
+    }, (error: any) => {
+      console.log(error)
+      this.setErrorMessage(error.error.message)
+      this.isScanningEPC = false;
+    })
 
-      this.isScanningEPC = true;
+    // @ts-ignore
+    console.log(transponderModel);
 
-      this.transponderStatusService.scanEPC().subscribe((data: Transponder) => {
-        this.isScanningEPC = false;
-        transponderModel = data;
-      }, (error: any) => {
-        console.log(error.error.message)
-        this.setErrorMessage(error.error.message)
-      })
-
-
-      // @ts-ignore
-      if (transponderModel !== undefined) {
-        this.transponderStatusService.addTransponderToTransponderModelArray(transponderModel);
-      }
-
-      this.size = this.transponderStatusService.getTransponderArray().length;
+    // @ts-ignore
+    if (transponderModel !== undefined) {
+      this.transponderStatusService.addTransponderToTransponderModelArray(transponderModel);
     }
-    this.isScanningEPC = false;
+    this.size = this.transponderStatusService.getTransponderArray().length;
+
   }
 
   ngOnDestroy() {

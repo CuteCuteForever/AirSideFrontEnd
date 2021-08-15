@@ -28,9 +28,9 @@
           <div class="col-sm">
             <button class="btn btn-primary"
                     type="Button"
-                    [disabled]="!this.isRFIDConnectedNow"
+                    [disabled]="!this.isRFIDConnectedNow || isScanningEPC"
                     (click)="EPCButtonPress(f);">
-              {{ epcBtnValue }}
+              Scan
             </button>
           </div>
         </div>
@@ -45,7 +45,7 @@
               ngModel
               required
               disabled
-              [(ngModel)]="epcTxtBoxValue"
+              [(ngModel)]="epcNG"
             >
           </div>
         </div>
@@ -88,6 +88,7 @@
                 name="warrantyFromDate"
                 [matDatepicker]="pickerFromDate"
                 ngModel
+                required
                 placeholder="Warranty From Date">
               <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
               <mat-datepicker #pickerFromDate></mat-datepicker>
@@ -99,6 +100,7 @@
                 name="warrantyToDate"
                 [matDatepicker]="pickerToDate"
                 ngModel
+                required
                 placeholder="Warranty To Date">
               <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
               <mat-datepicker #pickerToDate></mat-datepicker>
@@ -128,7 +130,9 @@
                        placeholder="Select"
                        appendTo="body"
                        name="serviceAvailability"
-                       [(ngModel)]="selectedServiceAvailability">
+                       ngModel
+                       required
+                       >
             </ng-select>
           </div>
         </div>

@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  {{data.message}}
+</div>
+<div class="container pt-2">
+    <div class="row justify-content-between pt-4">
+    <div class="col-3">
+      <button mat-raised-button value="Confirm" [mat-dialog-close]="true">Confirm</button>
+    </div>
+    <div class="col-3">
+      <button mat-raised-button value="Cancel" [mat-dialog-close]="false">Cancel</button>
+    </div>
+  </div>
+</div>

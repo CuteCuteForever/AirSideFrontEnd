@@ -1,27 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import {NgForm} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {AntennaService} from "./antenna.service";
+import {HttpClient} from "@angular/common/http";
+import {NgForm} from "@angular/forms";
+import * as myGlobals from '../../helper/globals';
 
 @Component({
-  selector: 'app-antenna',
+  selector: 'app-antenna-one',
   templateUrl: './antenna.component.html',
   styleUrls: ['./antenna.component.css']
 })
 export class AntennaComponent implements OnInit {
 
-  constructor(private antennaService: AntennaService, private httpClient: HttpClient) {
+  constructor(private antennaService: AntennaService) {
   }
 
   isLoading = false;
-  isSuccessful = true;
+
+  isPassiveAntennaOne =  false
+  isPassiveAntennaTwo=  false
+  isPassiveAntennaThree=  false
+  isPassiveAntennaFour =  false
+
+  isActiveAntennaOne=  false
+  isActiveAntennaTwo=  false
+  isActiveAntennaThree=  false
+  isActiveAntennaFour =  false
+
   isOpenAntenna = false;
+  isPassiveScanning = false;
+  isActiveScanning = false;
   isContinuousScanning = false;
 
+  isSuccessful = false;
+  isError = false;
   successMessage: string = "";
   errorMessage : string ="";
+  comPortValue : string = "";
 
-  comPortValue : string
   serialNumberValue: string;
   versionInformationValue: string;
   rfPowerValue: string;
@@ -31,20 +46,24 @@ export class AntennaComponent implements OnInit {
   measureReturnLossValue: string;
   baudRateValue: string;
 
-
   ngOnInit(): void {
-    this.isLoading = false;
+   this.comPortValue = this.antennaService.getComPortValue();
+   this.isOpenAntenna=  this.antennaService.getIsOpenAntenna();
   }
 
   getData(){
+    this.clearErrorMessage()
+    this.clearSuccessMessage()
     this.getAntennaParam();
-    this.successMessage = "Successfully Refresh Data";
+    this.setSuccessMessage("Successfully Refresh Data");
     this.isLoading = false;
   }
 
   async getAntennaParam() {
 
     this.isLoading = true;
+    this.clearErrorMessage()
+    this.clearSuccessMessage()
 
     if (this.isOpenAntenna) {
       this.serialNumberValue = await this.antennaService.getSerialNumber().toPromise().then((result: any) => {
@@ -52,9 +71,7 @@ export class AntennaComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        console.log(error.message)
-        this.errorMessage = error.message
+        this.setErrorMessage(error.error.message)
       });
     }
 
@@ -65,9 +82,7 @@ export class AntennaComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        console.log(error.message)
-        this.errorMessage = error.message
+        this.setErrorMessage(error.error.message)
       });
     }
 
@@ -77,9 +92,7 @@ export class AntennaComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        console.log(error.message)
-        this.errorMessage = error.message
+        this.setErrorMessage(error.error.message)
       });
     }
 
@@ -90,9 +103,7 @@ export class AntennaComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        console.log(error.message)
-        this.errorMessage = error.message
+        this.setErrorMessage(error.error.message)
       });
     }
 
@@ -103,9 +114,7 @@ export class AntennaComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        console.log(error.message)
-        this.errorMessage = error.message
+        this.setErrorMessage(error.error.message)
       });
     }
 
@@ -115,9 +124,7 @@ export class AntennaComponent implements OnInit {
           return result.message
         }
       }, (error : any) => {
-        this.isSuccessful = false
-        console.log(error.message)
-        this.errorMessage = error.message
+        this.setErrorMessage(error.error.message)
       });
     }
 
@@ -130,76 +137,121 @@ export class AntennaComponent implements OnInit {
   async updateDeviceParam(form: NgForm) {
 
     this.isLoading = true;
-    this.successMessage = "";
+    this.clearSuccessMessage();
+    this.clearErrorMessage()
 
     await this.antennaService.setBeepStatus(form.value.beepStatus).toPromise()
     await this.antennaService.setDRM(form.value.drm).toPromise();
     await this.antennaService.setRFPower(form.value.rfPower).toPromise()
 
-    this.successMessage ="Successfully Updated."
-    this.isSuccessful = true;
+    this.setSuccessMessage("Successfully Updated.")
     this.isLoading = false;
   }
 
   offAlarm() {
     this.antennaService.offAlarm().subscribe((data: any) => {
-      this.isLoading = false;
-      this.successMessage = data.message
-      this.isSuccessful = true;
+      this.setSuccessMessage(data.message)
       this.isOpenAntenna = true
     }, (error: any) => {
-      this.isSuccessful = false;
-      this.isLoading = false;
     });
+
+    this.isLoading = false
+  }
+
+  startPassiveScan(){
+    this.isPassiveScanning = true
+    this.antennaService.startPassiveScan(this.isPassiveAntennaOne, this.isPassiveAntennaTwo , this.isPassiveAntennaThree , this.isPassiveAntennaFour).subscribe()
+    this.setSuccessMessage("Antenna Continuous Scan Initiated")
+  }
+
+  stopPassiveScan(){
+    this.isPassiveScanning = false
+    this.antennaService.stopPassiveScan().subscribe()
+    this.setSuccessMessage("Antenna Continuous Scan Initiated")
   }
 
   startContinousScanning(){
     this.isContinuousScanning = true
-    this.antennaService.startContinousScanning().subscribe()
-    this.successMessage = "Antenna Continuous Scan Initiated"
+    this.antennaService.startPassiveContinousScanning().subscribe()
+    this.antennaService.startActiveContinousScanning().subscribe()
+    this.setSuccessMessage("Antenna Continuous Scan Initiated")
   }
 
   stopContinousScanning(){
     this.isContinuousScanning = false;
     this.antennaService.stopContinousScanning().subscribe();
-    this.successMessage = "Stop Antenna Continuous Scan successfully"
+    this.setSuccessMessage("Stop Antenna Continuous Scan successfully")
   }
 
-  openAntenna(form: NgForm) {
+  connectAntenna(form: NgForm) {
 
-    this.successMessage = "";
-    this.isLoading = true;
+    if (this.comPortValue === "") {
+      this.setErrorMessage("Please insert ComPort value first");
+    } else {
 
-    this.antennaService.openAntenna(this.comPortValue).subscribe((data: any) => {
-      this.isLoading = false;
-      this.successMessage = data.message
-      this.isSuccessful = true;
-      this.isOpenAntenna = true
-    }, (error : any) => {
+      this.clearErrorMessage()
+      this.clearSuccessMessage()
 
-      this.errorMessage = "Error occurred. Please disconnect and connect Antenna again."
+      this.isLoading = true;
 
-      this.isSuccessful = false;
-      this.isLoading = false;
-    });
+      this.antennaService.openAntenna(this.comPortValue).subscribe((data: any) => {
+        this.setSuccessMessage(data.message)
+        this.isLoading = false;
+        this.isOpenAntenna = true
+        this.antennaService.setIsOpenAntenna(true);
+        this.antennaService.antennaConnectedStatusEmitter.next(true);
+        this.antennaService.setComPortValue(this.comPortValue)
+      }, (error: any) => {
+        this.setErrorMessage("Error occurred. Please disconnect and connect Antenna again.")
+        this.isLoading = false;
+      });
+    }
+
   }
 
-  closeAntenna(){
-    this.isOpenAntenna = false;
+  disconnectAntenna(){
+
+    this.clearErrorMessage()
+    this.clearSuccessMessage()
+
     this.antennaService.closeAntenna().subscribe((data: any) => {
       this.isLoading = false;
-      this.isSuccessful = true;
-      if (data.message){
-        this.successMessage = data.message
+      this.setSuccessMessage(data.message)
+      this.isOpenAntenna = true;
+      this.antennaService.antennaConnectedStatusEmitter.next(false);
+    }, (error : any) => {
+      if (error.error.message) {
+        this.setErrorMessage(error.error.message)
+      } else {
+        this.setErrorMessage("Error Occurred. Please re-connect again.")
       }
-    }, error => {
     });
+
   }
 
   clearFields(form : NgForm){
     form.reset();
   }
 
-}
+  clearErrorMessage(){
+    this.isError = false;
+    this.errorMessage = "";
+  }
 
+  setErrorMessage(errorMessage : string) {
+    this.isError = true;
+    this.errorMessage = errorMessage;
+  }
+
+  setSuccessMessage(successMessage : string) {
+    this.isSuccessful = true;
+    this.successMessage = successMessage;
+  }
+
+  clearSuccessMessage() {
+    this.isSuccessful = true;
+    this.successMessage = "";
+  }
+
+}
 
