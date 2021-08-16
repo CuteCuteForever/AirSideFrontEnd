@@ -129,7 +129,7 @@
 
         <ng-container matColumnDef="dueNotice">
           <tr><th  mat-header-cell *matHeaderCellDef >Due Notice </th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.dueNotice}} </td>
+          <tr><td mat-cell *matCellDef="let element" > {{element.dueNotice}} </td>
         </ng-container>
 
         <ng-container matColumnDef="rowRecordStatus">
@@ -137,13 +137,48 @@
           <tr><td mat-cell *matCellDef="let element"> {{element.rowRecordStatus}} </td></tr>
         </ng-container>
 
-        <ng-container matColumnDef="timestamp">
-          <tr><th  mat-header-cell *matHeaderCellDef >Timestamp </th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.timestamp}} </td></tr>
+        <ng-container matColumnDef="warrantyFromDate">
+          <tr><th  mat-header-cell *matHeaderCellDef >Warranty From Date</th> </tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.warrantyFromDate}} </td></tr>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <ng-container matColumnDef="warrantyToDate">
+          <tr><th  mat-header-cell *matHeaderCellDef >Warranty To Date</th> </tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.warrantyToDate}} </td></tr>
+        </ng-container>
+
+        <ng-container matColumnDef="registrationNumber">
+          <tr><th  mat-header-cell *matHeaderCellDef >Veh. Reg. No.</th> </tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.registrationNumber}} </td></tr>
+        </ng-container>
+
+        <ng-container matColumnDef="companyName">
+          <tr><th  mat-header-cell *matHeaderCellDef >Company</th> </tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.companyName}} </td></tr>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <tr><th  mat-header-cell *matHeaderCellDef >Address</th> </tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.address}} </td></tr>
+        </ng-container>
+
+        <ng-container matColumnDef="contactPersonName">
+          <tr><th  mat-header-cell *matHeaderCellDef >Contact Person</th> </tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.contactPersonName}} </td></tr>
+        </ng-container>
+
+        <ng-container matColumnDef="contactPersonNumber">
+          <tr><th  mat-header-cell *matHeaderCellDef >Contact Person No.</th> </tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.contactPersonNumber}} </td></tr>
+        </ng-container>
+
+        <ng-container matColumnDef="department">
+          <tr><th  mat-header-cell *matHeaderCellDef >Department </th></tr>
+          <tr><td mat-cell *matCellDef="let element"> {{element.department}} </td></tr>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.make-orangered]="row.dueNotice === 'Overdue'" [class.make-greenyellow]="row.dueNotice === 'Due Soon'"></tr>
       </table>
 
       <mat-paginator [pageSizeOptions]="[5, 10, 20]"

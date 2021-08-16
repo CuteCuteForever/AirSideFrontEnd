@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TransponderStatusService} from "./transponder-status.service";
-import {RFIDService} from "../../rfid/r-f-i-d.service";
+import {RfidService} from "../../rfid/rfid.service";
 import {AddTransponderService} from "../../transponder/add-transponder/add-transponder.service";
 import {TransponderModel} from "./transponder.model";
 import {Subscription} from "rxjs";
@@ -40,7 +40,7 @@ export class BorrowTransponderComponent implements OnInit {
     {id: 4, value: 'Yearly'},
   ];
 
-  constructor(private transponderStatusService : TransponderStatusService , private rfidService : RFIDService ) { }
+  constructor(private transponderStatusService : TransponderStatusService , private rfidService : RfidService ) { }
 
   ngOnInit() {
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AddTransponderService} from "./add-transponder.service";
 import { TransponderModel} from "./transponder.model";
-import {RFIDService} from "../../rfid/r-f-i-d.service";
+import {RfidService} from "../../rfid/rfid.service";
 
 const REST_API_SERVER = 'http://localhost:8080/';
 
@@ -28,7 +28,7 @@ export class AddTransponderComponent implements OnInit {
     {id: 2, value: 'Not Spare'},
   ];
 
-  constructor(private registerTransponderService : AddTransponderService , private rfidService : RFIDService) { }
+  constructor(private registerTransponderService : AddTransponderService , private rfidService : RfidService) { }
 
   ngOnInit() {
     //this.epcNG = "E20030340404010"
@@ -93,9 +93,9 @@ export class AddTransponderComponent implements OnInit {
         this.epcNG = data.message ;
         this.isScanningEPC = false
       }, error => {
+        console.log(error)
         if (error.error.message){
           this.setErrorMessage(error.error.message)
-          console.log(error)
         }
         this.isScanningEPC = false
       });

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {ReturnTransponderModel} from "./return-transponder.model";
-import {RFIDService} from "../../rfid/r-f-i-d.service";
+import {RfidService} from "../../rfid/rfid.service";
 import {TransponderModel} from "./transponder.model";
 import {TransponderStatusService} from "./transponder-status.service";
 
@@ -26,7 +26,7 @@ export class ReturnTransponderComponent implements OnInit {
   transponderID : string;
   size : number = 0;
 
-  constructor(private transponderStatusService : TransponderStatusService  , private rfidService : RFIDService) { }
+  constructor(private transponderStatusService : TransponderStatusService  , private rfidService : RfidService) { }
 
   ngOnInit() {
 

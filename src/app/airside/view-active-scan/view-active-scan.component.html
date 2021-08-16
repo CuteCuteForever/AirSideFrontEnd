@@ -17,19 +17,6 @@
           </mat-form-field>
         </div>
       </div>
-
-      <div class="col-2">
-        <div class="vertical-form-field">
-          <mat-form-field appearance="fill" class="no-label-field">
-            <mat-select [formControl]="antennaNumberFilter">
-              <mat-option value="">-- Antenna Number --</mat-option>
-              <mat-option *ngFor="let status of antennaNumberSources" [value]="status.value">
-                {{status.display}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
     </div>
 
     <div>

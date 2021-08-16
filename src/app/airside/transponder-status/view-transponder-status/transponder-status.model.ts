@@ -3,8 +3,8 @@ export class TransponderStatusModel {
   constructor(
     public transponderStatusId: number,
     public companyId: string,
-    public outTimestamp: string,
     public inTimestamp: string,
+    public outTimestamp: string,
     public rentalDuration : string,
     public transponderId : string,
     public transponderStatus : string,

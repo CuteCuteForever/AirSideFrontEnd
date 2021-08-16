@@ -6,7 +6,7 @@ import {Subject} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class RFIDService {
+export class RfidService {
 
   isRFIDConnected = false;
   desktopReaderConnectedStatusEmitter = new Subject<boolean>();

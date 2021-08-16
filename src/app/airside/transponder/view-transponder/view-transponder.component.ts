@@ -39,8 +39,15 @@ export class ViewTransponderComponent implements OnInit,AfterViewInit  {
 
   constructor(private route: ActivatedRoute) {
     this.transponderArray = this.route.snapshot.data.viewTransponders;
+
+    for (let i = 0; i < this.transponderArray.length; i++) {
+      this.transponderArray[i].timestamp = new Date(this.transponderArray[i].timestamp).toLocaleString()
+    }
+
     this.dataSource = new MatTableDataSource(this.transponderArray);
     this.dataSource.filterPredicate = this.createFilter();
+
+
   }
 
   ngOnInit(): void {
@@ -81,7 +88,6 @@ export class ViewTransponderComponent implements OnInit,AfterViewInit  {
     // @ts-ignore
     let filterFunction = function (transponder, filter): boolean {
       let searchTerms = JSON.parse(filter);
-       console.log(filter)
       return transponder.callSign.toLowerCase().indexOf(searchTerms.callSign.toLowerCase()) !== -1
         && transponder.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0;
     }

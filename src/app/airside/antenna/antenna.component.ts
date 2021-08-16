@@ -21,22 +21,21 @@ export class AntennaComponent implements OnInit {
   isPassiveAntennaThree=  false
   isPassiveAntennaFour =  false
 
-  isActiveAntennaOne=  false
-  isActiveAntennaTwo=  false
-  isActiveAntennaThree=  false
-  isActiveAntennaFour =  false
+  isActiveAntennaOne=  true
+  isActiveAntennaTwo=  true
+  isActiveAntennaThree=  true
+  isActiveAntennaFour =  true
 
   isOpenAntenna = false;
   isPassiveScanning = false;
   isActiveScanning = false;
-  isContinuousScanning = false;
 
   isSuccessful = false;
   isError = false;
   successMessage: string = "";
   errorMessage : string ="";
-  comPortValue : string = "";
 
+  comPortValue : string = "";
   serialNumberValue: string;
   versionInformationValue: string;
   rfPowerValue: string;
@@ -161,26 +160,25 @@ export class AntennaComponent implements OnInit {
   startPassiveScan(){
     this.isPassiveScanning = true
     this.antennaService.startPassiveScan(this.isPassiveAntennaOne, this.isPassiveAntennaTwo , this.isPassiveAntennaThree , this.isPassiveAntennaFour).subscribe()
-    this.setSuccessMessage("Antenna Continuous Scan Initiated")
+    this.setSuccessMessage("Antenna Passive Scan Initiated")
   }
 
   stopPassiveScan(){
     this.isPassiveScanning = false
     this.antennaService.stopPassiveScan().subscribe()
-    this.setSuccessMessage("Antenna Continuous Scan Initiated")
+    this.setSuccessMessage("Antenna Passive Scan Initiated")
   }
 
-  startContinousScanning(){
-    this.isContinuousScanning = true
-    this.antennaService.startPassiveContinousScanning().subscribe()
-    this.antennaService.startActiveContinousScanning().subscribe()
-    this.setSuccessMessage("Antenna Continuous Scan Initiated")
+  startActiveScan(){
+    this.isActiveScanning = true
+    this.antennaService.startActiveScan(this.isActiveAntennaOne, this.isActiveAntennaTwo , this.isActiveAntennaThree , this.isActiveAntennaFour).subscribe()
+    this.setSuccessMessage("Antenna Active Scan Initiated")
   }
 
-  stopContinousScanning(){
-    this.isContinuousScanning = false;
-    this.antennaService.stopContinousScanning().subscribe();
-    this.setSuccessMessage("Stop Antenna Continuous Scan successfully")
+  stopActiveScan(){
+    this.isActiveScanning = false
+    this.antennaService.stopActiveScan().subscribe();
+    this.setSuccessMessage("Stop Antenna Active Scan successfully")
   }
 
   connectAntenna(form: NgForm) {

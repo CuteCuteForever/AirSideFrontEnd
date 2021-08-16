@@ -9,6 +9,6 @@ export class Transponder {
     public warrantyToDate : string,
     public epc: string,
     public rowRecordStatus: string,
-    public timestamp : Date
+    public timestamp : string
   ) {}
 }

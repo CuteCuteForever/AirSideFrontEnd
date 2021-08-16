@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RFIDService } from './r-f-i-d.service';
+import { RfidService } from './rfid.service';
 import {NgForm} from "@angular/forms";
 import {concat, forkJoin, Subject, Subscription} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
@@ -21,7 +21,7 @@ function sleep(milliseconds : any) {
 export class RFIDComponent implements OnInit {
 
 
-  constructor(private rfidService: RFIDService, private httpClient: HttpClient) {
+  constructor(private rfidService: RfidService, private httpClient: HttpClient) {
   }
 
   isLoading = false;
@@ -168,6 +168,7 @@ export class RFIDComponent implements OnInit {
       this.isLoading = false;
       this.rfidService.desktopReaderConnectedStatusEmitter.next(true);
     }, (error :any) => {
+      console.log(error)
       this.setErrorMessage(error.error.message);
       this.isLoading = false;
     });

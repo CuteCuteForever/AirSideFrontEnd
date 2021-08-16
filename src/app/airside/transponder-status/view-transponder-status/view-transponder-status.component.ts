@@ -6,6 +6,7 @@ import {MatSort} from "@angular/material/sort";
 import {FormControl} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {TransponderStatusModel} from "./transponder-status.model";
+import {Timestamp} from "rxjs/internal-compatibility";
 
 @Component({
   selector: 'app-view-transponder-status',
@@ -15,16 +16,24 @@ import {TransponderStatusModel} from "./transponder-status.model";
 export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
 
   displayedColumns: string[] = [
+    'callSign',
     'outTimestamp',
     'inTimestamp',
-    'callSign',
     'serialNumber',
     'duration',
     'rentalDuration',
     'transponderStatus',
     'dueNotice',
     'rowRecordStatus' ,
-    'timestamp'];
+    'warrantyFromDate',
+    'warrantyToDate',
+    'registrationNumber',
+    'companyName',
+    'address',
+    'contactPersonName',
+    'contactPersonNumber',
+    'department'
+    ];
 
   dataSource: MatTableDataSource<TransponderStatusModel>
 
@@ -79,6 +88,12 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     console.log(this.transponderStatusArray)
     this.dataSource = new MatTableDataSource(this.transponderStatusArray);
     this.dataSource.filterPredicate = this.createFilter();
+
+    for (let i = 0; i < this.transponderStatusArray.length; i++) {
+      this.transponderStatusArray[i].outTimestamp = new Date(this.transponderStatusArray[i].outTimestamp).toLocaleString()
+      this.transponderStatusArray[i].inTimestamp = new Date(this.transponderStatusArray[i].inTimestamp).toLocaleString()
+    }
+
   }
 
   ngOnInit(): void {
@@ -158,7 +173,7 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
       && transponderStatusModel.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0
       && transponderStatusModel.dueNotice.toLowerCase().indexOf(searchTerms.dueNotice.toLowerCase()) == 0
         && transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
-     // && transponderStatusModel.rentalDuration === null && searchTerms.rentalDuration.toLowerCase() === "" ? true : (transponderStatusModel.rentalDuration === null ? false : transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0)
+      && transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0
 
       //&& transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
      //  ;

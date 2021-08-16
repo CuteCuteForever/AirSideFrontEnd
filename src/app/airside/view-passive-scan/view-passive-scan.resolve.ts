@@ -7,9 +7,9 @@ import { ViewPassiveScanService } from "./view-passive-scan.service";
 @Injectable()
 export class ViewPassiveScanResolve implements Resolve<EPCPassiveModel[]> {
 
-  constructor(private viewCompanyService: ViewPassiveScanService) {}
+  constructor(private viewPassiveScanService: ViewPassiveScanService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<EPCPassiveModel[]> {
-    return this.viewCompanyService.getViewPassiveScan()
+    return this.viewPassiveScanService.getViewPassiveScan()
   }
 }

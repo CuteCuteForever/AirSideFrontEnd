@@ -54,6 +54,14 @@ export class AntennaService {
     return this.httpClient.get(this.REST_API_SERVER+"stopPassiveScan");
   }
 
+  startActiveScan( isActiveAntennaOne : boolean , isActiveAntennaTwo : boolean , isActiveAntennaThree : boolean , isActiveAntennaFour : boolean){
+    return this.httpClient.get(this.REST_API_SERVER+"activeScan"+"/"+isActiveAntennaOne +"/"+isActiveAntennaTwo+"/"+isActiveAntennaThree+"/"+isActiveAntennaFour  );
+  }
+
+  stopActiveScan(){
+    return this.httpClient.get(this.REST_API_SERVER+"stopActiveScan");
+  }
+
   stopContinousScanning(){
     return this.httpClient.get(this.REST_API_SERVER+"antennastopcontinuousscan");
   }

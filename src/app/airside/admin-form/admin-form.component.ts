@@ -4,6 +4,7 @@ import * as pdfFonts from'pdfmake/build/vfs_fonts';
 import {CompanyModel} from "../vehicle/update-vehicle/company.model";
 import {UpdateVehicleService} from "../vehicle/update-vehicle/update-vehicle.service";
 import {AdminFormService} from "./admin-form.service";
+import {VehicleCompanyModel} from "./vehicle-company.model";
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
 
 //Company PDF model
@@ -21,6 +22,8 @@ class Company {
 export class AdminFormComponent implements OnInit {
 
   companySelectArray : CompanyModel[];
+  vehicleCompanyModel : VehicleCompanyModel = new VehicleCompanyModel();
+
   isError  = false ;
   isSuccessful = false;
   successMessage = "";
@@ -107,13 +110,14 @@ export class AdminFormComponent implements OnInit {
 
   onChangeCompanySelect(companySelected: any) {
 
-    /*this.adminFormService.getVehicleByCompanyId(company.companyId).subscribe( data => {
-      this.adminFormService = data;
+    this.adminFormService.getVehicleCompany(companySelected.companyId).subscribe( data => {
+      this.vehicleCompanyModel = data;
+      console.log(this.vehicleCompanyModel)
     }, error => {
       if (error.message){
-        this.setErrorMessage(error.message)
+        console.log(error)
+        this.setErrorMessage(error.error.message)
       }
-    });*/
-
+    });
   }
 }
