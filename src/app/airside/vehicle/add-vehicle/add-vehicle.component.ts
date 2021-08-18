@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {AddVehicleService} from "./add-vehicle.service";
 import {Company} from "./company.model";
-import {NgForm} from "@angular/forms";
+import {FormControl, FormGroup, NgForm} from "@angular/forms";
 import {Vehicle} from "./vehicle.model";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-add-vehicle',
@@ -11,13 +12,25 @@ import {Vehicle} from "./vehicle.model";
 })
 export class AddVehicleComponent implements OnInit {
 
-  constructor(private addVehicleService : AddVehicleService) { }
+  constructor(private addVehicleService : AddVehicleService , public dialogRef: MatDialogRef<AddVehicleComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
 
+    this.form = new FormGroup ({
+      company: new FormControl(),
+      companyId: new FormControl(),
+      registrationNumber: new FormControl()
+    });
+
+
+  }
+
+  form: FormGroup;
   isError  = false ;
   isSuccessful = false;
   successMessage = "";
   errorMessage : string ;
 
+  selectedCompanyId : string;
   companyArray:  Company[];
 
   onSubmit(form: NgForm) {
@@ -59,6 +72,27 @@ export class AddVehicleComponent implements OnInit {
         this.setErrorMessage(error.message)
       }
     });
+  }
+
+  selectedCompany(value : any){
+    this.selectedCompanyId = value;
+  }
+
+  save(){
+
+    const vehicle: Vehicle = new Vehicle(
+      null,
+      this.selectedCompanyId,
+      this.form.value.registrationNumber,
+      "valid",
+      new Date()
+    );
+
+   this.dialogRef.close(vehicle);
+  }
+
+  cancel(){
+    this.dialogRef.close();
   }
 
   clearErrorMessage(){

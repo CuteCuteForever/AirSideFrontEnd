@@ -17,7 +17,7 @@ mat-panel-title {
 .mat-header-cell {
   word-wrap: initial;
   display: table-cell;
-  padding: 0px 30px;
+  padding: 0px 10px;
   line-break: unset;
   white-space: nowrap;
   overflow: hidden;

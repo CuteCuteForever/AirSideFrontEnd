@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, NgForm} from "@angular/forms";
 import {UpdateVehicleService} from "./update-vehicle.service";
-import {VehicleCompanyModel} from "./vehicle-company.model";
+import {VehicleCompanyModel} from "../view-vehicle/vehicle-company.model";
 import {VehicleModel} from "./vehicle.model";
 import {CompanyModel} from "./company.model";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-update-vehicle',
@@ -12,8 +13,8 @@ import {CompanyModel} from "./company.model";
 })
 export class UpdateVehicleComponent  implements OnInit {
 
-  constructor(private updateVehicleService : UpdateVehicleService) { }
-
+  vehicleCompanyModel : VehicleCompanyModel;
+  form: FormGroup;
   isError  = false ;
   isSuccessful = false;
   successMessage = "";
@@ -26,6 +27,22 @@ export class UpdateVehicleComponent  implements OnInit {
 
   vehicleSelectArray : VehicleModel[];
   companySelectArray : CompanyModel[];
+
+  constructor(private updateVehicleService : UpdateVehicleService, public dialogRef: MatDialogRef<UpdateVehicleComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+
+    this.vehicleCompanyModel  = data.vehicleCompanyData;
+
+    this.form = new FormGroup ({
+      companyName: new FormControl(this.vehicleCompanyModel.companyName),
+      registrationNumber: new FormControl(this.vehicleCompanyModel.vehicleRegistrationNumber),
+      newRegistrationNumber: new FormControl(),
+    });
+
+    this.form.controls['companyName'].disable();
+    this.form.controls['registrationNumber'].disable();
+  }
+
 
   onSubmit(form: NgForm) {
 
@@ -41,8 +58,6 @@ export class UpdateVehicleComponent  implements OnInit {
       "valid",
       new Date()
     );
-
-    console.log(vehicle)
 
     this.updateVehicleService.updateVehicle(vehicle).subscribe(
       (data : any) => {
@@ -86,6 +101,23 @@ export class UpdateVehicleComponent  implements OnInit {
 
   onChangeVehicleSelect(vehicleModel: VehicleModel ){
     this.vehicleSelected = vehicleModel;
+  }
+
+  save(){
+    const vehicle: VehicleModel = new VehicleModel(
+      null,
+      this.vehicleCompanyModel.vehicleId,
+      this.vehicleCompanyModel.companyId,
+      this.form.value.newRegistrationNumber,
+      "valid",
+      new Date()
+    );
+
+    this.dialogRef.close(vehicle);
+  }
+
+  Cancel(){
+    this.dialogRef.close();
   }
 
   clearErrorMessage(){

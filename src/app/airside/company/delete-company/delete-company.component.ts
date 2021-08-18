@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgForm} from "@angular/forms";
 import { CompanyModel } from "./company.model";
-import { companyService } from "./delete-company.service"
+import { DeleteCompanyService} from "./delete-company.service"
 import {ConfirmDialogCompanyDeleteComponent } from "../confirm-dialog-delete/confirm-dialog-delete.component";
 import {MatDialog} from "@angular/material/dialog";
 import {TransponderModel} from "../../transponder/delete-transponder/transponder.model";
@@ -13,7 +13,7 @@ import {TransponderModel} from "../../transponder/delete-transponder/transponder
 })
 export class DeleteCompanyComponent  implements OnInit {
 
-  constructor(private companyService : companyService , private dialog: MatDialog) { }
+  constructor(private deleteCompanyService : DeleteCompanyService , private dialog: MatDialog) { }
 
   companyArray:  CompanyModel[];
   companyNG : any;
@@ -27,7 +27,7 @@ export class DeleteCompanyComponent  implements OnInit {
     this.clearSuccessMessage()
     this.clearErrorMessage()
 
-    this.companyService.getCompany().subscribe( data => {
+    this.deleteCompanyService.getCompany().subscribe( data => {
       this.companyArray = data;
     }, error => {
       if (error.message){
@@ -50,7 +50,7 @@ export class DeleteCompanyComponent  implements OnInit {
     });
     confirmDialog.afterClosed().subscribe(result => {
       if (result === true) {
-        this.companyService.deleteCompany(this.companyNG).subscribe(
+        this.deleteCompanyService.deleteCompany(this.companyNG).subscribe(
           (data : any) => {
             this.setSuccessMessage(data.message)
             form.reset();

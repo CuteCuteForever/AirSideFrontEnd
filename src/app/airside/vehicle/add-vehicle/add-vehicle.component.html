@@ -1,3 +1,36 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  {{data.message}}
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content [formGroup]="form">
+
+  <mat-form-field style="width:100%" class="pt-4" >
+    <mat-select (selectionChange)="selectedCompany($event.value)" placeholder="-- Select Company --">
+      <mat-option *ngFor="let company of companyArray" [value]="company.companyId">
+        {{company.companyName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field  style="width:100%">
+    <input matInput
+           placeholder="Vehicle Registration Number"
+           formControlName="registrationNumber">
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<div class="container pt-2">
+  <div class="row justify-content-between pt-4">
+    <button class="mat-raised-button mat-primary"(click)="save()">Save</button>
+    <button class="mat-raised-button"(click)="cancel()">Cancel</button>
+  </div>
+</div>
+
+
+
+<!--
 <div class="container pt-xl-5 pt-md-2 pt-5">
   <div class="row justify-content-md-center center">
     <div class="col-xs-12 col-md-7 col-md-offset-7">
@@ -62,3 +95,4 @@
     </div>
   </div>
 </div>
+-->

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, NgForm} from "@angular/forms";
 import {TransponderModel} from "./transponder.model";
 import {UpdateTransponderService} from "./update-transponder.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-update-transponder',
@@ -10,7 +11,6 @@ import {UpdateTransponderService} from "./update-transponder.service";
 })
 export class UpdateTransponderComponent implements OnInit {
 
-  constructor(private updateTransponderService : UpdateTransponderService) { }
 
   isError  = false ;
   isSuccessful = false;
@@ -34,6 +34,26 @@ export class UpdateTransponderComponent implements OnInit {
     {id: 1, value: 'Spare'},
     {id: 2, value: 'Not Spare'},
   ];
+
+  constructor(private updateTransponderService : UpdateTransponderService,  public dialogRef: MatDialogRef<UpdateTransponderComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+
+
+    this.transponder = data.transponder;
+
+    this.transponderRowIdNG =  this.transponder.transponderRowId
+    this.transponderIdNG =  this.transponder.transponderId
+    this.callSignNG =  this.transponder.callSign
+    this.epcNG =  this.transponder.epc
+    this.descriptionNG =  this.transponder.description
+    this.warrantyFromDateNG =  this.transponder.warrantyFromDate
+    this.warrantyToDateNG =  this.transponder.warrantyToDate
+    this.serialNumberNG =  this.transponder.serialNumber
+    this.serviceAvailabilityNG =  this.transponder.serviceAvailability
+
+  }
+
+
 
   onSubmit(form: NgForm) {
 
@@ -98,6 +118,38 @@ export class UpdateTransponderComponent implements OnInit {
     this.warrantyToDateNG= (val.warrantyToDate)
     this.epcNG= (val.epc)
     this.serviceAvailabilityNG = (val.serviceAvailability)
+  }
+
+  save() {
+
+    this.clearErrorMessage()
+    this.clearSuccessMessage()
+
+    if (new Date(this.warrantyFromDateNG) > new Date(this.warrantyToDateNG)) {
+      this.setErrorMessage("Warranty From Date cannot be older than Warrant To Date.")
+    }
+
+    if (!this.isError) {
+
+      const transponderModel: TransponderModel = new TransponderModel(
+        this.transponderRowIdNG,
+        this.transponderIdNG,
+        this.callSignNG,
+        this.serialNumberNG,
+        this.serviceAvailabilityNG,
+        this.descriptionNG,
+        this.warrantyFromDateNG,
+        this.warrantyToDateNG,
+        this.epcNG,
+        "valid",
+        new Date());
+
+      this.dialogRef.close(transponderModel);
+    }
+  }
+
+  cancel(){
+    this.dialogRef.close();
   }
 
   clearErrorMessage(){

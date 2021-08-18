@@ -7,7 +7,7 @@ const REST_API_SERVER = 'http://localhost:8080/';
 @Injectable({
   providedIn: 'root'
 })
-export class companyService {
+export class DeleteCompanyService {
 
   constructor(private http: HttpClient) { }
 

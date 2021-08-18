@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, NgForm} from "@angular/forms";
 import {AddTransponderService} from "./add-transponder.service";
 import { TransponderModel} from "./transponder.model";
 import {RfidService} from "../../rfid/rfid.service";
+import {AddCompanyService} from "../../company/add-company/add-company.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 const REST_API_SERVER = 'http://localhost:8080/';
 
@@ -28,14 +30,16 @@ export class AddTransponderComponent implements OnInit {
     {id: 2, value: 'Not Spare'},
   ];
 
-  constructor(private registerTransponderService : AddTransponderService , private rfidService : RfidService) { }
+  constructor(private addTransponderService : AddTransponderService , private rfidService : RfidService , public dialogRef: MatDialogRef<AddTransponderComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   ngOnInit() {
     //this.epcNG = "E20030340404010"
     this.isRFIDConnectedNow = this.rfidService.isRFIDConnected ;
 
     if (!this.isRFIDConnectedNow) {
-      this.setErrorMessage("RFID Card Reader not connected. Please connect it before scanning.");
+      this.setErrorMessage("Please connect Card Reader first.");
     }
 
   }
@@ -66,8 +70,7 @@ export class AddTransponderComponent implements OnInit {
        "valid",
        new Date());
 
-     console.log(transponder)
-     this.registerTransponderService.insertTransponder(transponder).subscribe({
+     this.addTransponderService.insertTransponder(transponder).subscribe({
        next: data => {
          this.setSuccessMessage(data.message);
        },
@@ -89,7 +92,7 @@ export class AddTransponderComponent implements OnInit {
 
       this.isScanningEPC = true;
 
-      this.registerTransponderService.scanEPC().subscribe( (data : any) => {
+      this.addTransponderService.scanEPC().subscribe( (data : any) => {
         this.epcNG = data.message ;
         this.isScanningEPC = false
       }, error => {
@@ -102,6 +105,40 @@ export class AddTransponderComponent implements OnInit {
     }
 
   }
+
+  save(form: NgForm) {
+
+    this.clearSuccessMessage()
+    this.clearErrorMessage()
+
+    if (new Date(form.value.warrantyFromDate) > new Date(form.value.warrantyToDate)) {
+      this.setErrorMessage("Warranty From Date cannot be older than Warrant To Date.")
+    }
+
+    if (!this.isError) {
+
+      const transponder: TransponderModel = new TransponderModel(
+        null,
+        null,
+        form.value.callSign,
+        form.value.serialNumber,
+        form.value.serviceAvailability.value,
+        form.value.description,
+        form.value.warrantyFromDate,
+        form.value.warrantyToDate,
+        //"E111111111111",
+        this.epcNG,
+        "valid",
+        new Date());
+
+      this.dialogRef.close(transponder);
+    }
+  }
+
+  cancel(){
+    this.dialogRef.close();
+  }
+
   clearErrorMessage(){
     this.isError = false;
     this.errorMessage = "";

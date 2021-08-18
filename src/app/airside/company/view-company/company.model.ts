@@ -1,5 +1,6 @@
 export class CompanyModel {
   constructor(
+    public companyRowId: string,
     public companyId: string,
     public companyName: string,
     public address: string,
@@ -7,6 +8,6 @@ export class CompanyModel {
     public contactPersonNumber: string,
     public department : string,
     public rowRecordStatus : string,
-    public timestamp: string
+    public timestamp: Date
   ) {}
 }

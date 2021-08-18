@@ -16,7 +16,7 @@ export class DeleteVehicleService  {
     return this.http.get<CompanyModel[]>(REST_API_SERVER+'uniqueCompany');
   }
 
-  deleteCompany( vehicle : VehicleModel){
+  deleteVehicle( vehicle : VehicleModel){
     return this.http.post<any>(REST_API_SERVER+'deleteVehicle' , vehicle) ;
   }
 

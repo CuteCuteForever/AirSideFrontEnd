@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<mat-divider></mat-divider>
+<div class="pt-4">
+  <div mat-dialog-content>
+    {{data.message}}
+  </div>
+</div>
+
+<div class="container pt-5">
+  <div class="row justify-content-center">
+
+    <div class="col-3">
+      <button class="mat-raised-button mat-primary" [mat-dialog-close]="true">ok</button>
+    </div>
+  </div>
+</div>

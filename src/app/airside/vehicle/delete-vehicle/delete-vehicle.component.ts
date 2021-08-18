@@ -43,7 +43,7 @@ export class DeleteVehicleComponent implements OnInit {
     });
     confirmDialog.afterClosed().subscribe(result => {
       if (result === true) {
-        this.deleteVehicleService.deleteCompany(this.vehicleSelected).subscribe(
+        this.deleteVehicleService.deleteVehicle(this.vehicleSelected).subscribe(
           (data : any) => {
             this.setSuccessMessage(data.message)
             form.reset();

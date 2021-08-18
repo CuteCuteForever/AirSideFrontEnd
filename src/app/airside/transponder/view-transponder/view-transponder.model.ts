@@ -1,5 +1,5 @@
 //insert model
-export class TransponderModel {
+export class ViewTransponderModel {
   constructor(
     public transponderRowId: string | null,
     public transponderId: string | null,
@@ -11,6 +11,6 @@ export class TransponderModel {
     public warrantyToDate : Date,
     public epc: string,
     public rowRecordStatus: string,
-    public timestamp : Date
+    public timestamp : string
   ) {}
 }

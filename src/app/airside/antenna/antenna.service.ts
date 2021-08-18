@@ -11,8 +11,18 @@ export class AntennaService {
   private REST_API_SERVER = "http://localhost:8080/";
 
   private _isOpenAntenna = false;
-  comPortValue : string = "";
+
   antennaConnectedStatusEmitter = new Subject<boolean>();
+
+  public comPortValue : string = "";
+  public serialNumberValue: string;
+  public versionInformationValue: string;
+  public rfPowerValue: string;
+  public drmValue: string;
+  public beepStatusValue: string;
+  public readerTemperatureValue: string;
+  public measureReturnLossValue: string;
+  public baudRateValue: string;
 
   constructor(private httpClient: HttpClient) { }
 

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, NgForm} from "@angular/forms";
 import { Company} from "./company.model";
-import { companyService } from "./add-company.service"
+import {AddCompanyService} from "./add-company.service"
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-add-company',
@@ -10,8 +11,24 @@ import { companyService } from "./add-company.service"
 })
 export class AddCompanyComponent implements OnInit {
 
-  constructor(private companyService : companyService) { }
+  constructor(private addCompanyService : AddCompanyService, public dialogRef: MatDialogRef<AddCompanyComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
 
+    this.form = new FormGroup ({
+      companyRowId: new FormControl(),
+      companyId: new FormControl(),
+      companyName: new FormControl(),
+      address: new FormControl(),
+      contactPersonName: new FormControl(),
+      contactPersonNumber: new FormControl(),
+      department: new FormControl(),
+      rowRecordStatus: new FormControl(),
+      timestamp: new FormControl(),
+    });
+
+  }
+
+  form: FormGroup;
   isError  = false ;
   isSuccessful = false;
   successMessage = "";
@@ -38,7 +55,7 @@ export class AddCompanyComponent implements OnInit {
     );
 
     console.log(newCompany)
-    this.companyService.insertCompany(newCompany).subscribe(
+    this.addCompanyService.insertCompany(newCompany).subscribe(
       (data : any) => {
         this.setSuccessMessage(data.message)
         form.reset();
@@ -50,6 +67,14 @@ export class AddCompanyComponent implements OnInit {
       }
     );
 
+  }
+
+  save(){
+    this.dialogRef.close(this.form.value);
+  }
+
+  cancel(){
+    this.dialogRef.close();
   }
 
   clearErrorMessage(){

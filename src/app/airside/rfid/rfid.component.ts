@@ -20,10 +20,6 @@ function sleep(milliseconds : any) {
 })
 export class RFIDComponent implements OnInit {
 
-
-  constructor(private rfidService: RfidService, private httpClient: HttpClient) {
-  }
-
   isLoading = false;
 
   isError = false;
@@ -43,11 +39,18 @@ export class RFIDComponent implements OnInit {
 
   ERROR_CONNECT_DISCONNECT : string = "An error occurred. Please close RFID Card Reader and initialize again";
 
+  constructor(private rfidService: RfidService, private httpClient: HttpClient) {
+  }
+
   ngOnInit(): void {
-/*
-    if (!this.isOpenRFIDReader) {
-      this.setErrorMessage("Please refrain from placing RFID tags on Card Reader upon connecting.")
-    }*/
+    this.isOpenRFIDReader = this.rfidService.isRFIDConnected;
+    this.transportValue= this.rfidService.transportValue
+    this.workModeValue= this.rfidService.workModeValue
+    this.deviceAddressValue= this.rfidService.deviceAddressValue
+    this.filterTimeValue= this.rfidService.filterTimeValue
+    this.rfPowerValue= this.rfidService.rfPowerValue
+    this.beepEnableValue= this.rfidService.beepEnableValue
+    this.uartBaudRateValue= this.rfidService.uartBaudRateValue
   }
 
 
@@ -61,6 +64,7 @@ export class RFIDComponent implements OnInit {
     if (this.isOpenRFIDReader) {
       this.transportValue = await this.rfidService.getDeviceParam(1).toPromise().then((result: any) => {
         if(result) {
+          this.rfidService.transportValue = result.message
           return result.message
         }
       } , (error : any) => {
@@ -71,6 +75,7 @@ export class RFIDComponent implements OnInit {
     if (this.isOpenRFIDReader) {
       this.workModeValue = await this.rfidService.getDeviceParam(2).toPromise().then((result: any) => {
         if(result) {
+          this.rfidService.workModeValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -82,6 +87,7 @@ export class RFIDComponent implements OnInit {
     if (this.isOpenRFIDReader) {
       this.deviceAddressValue = await this.rfidService.getDeviceParam(3).toPromise().then((result: any) => {
         if(result) {
+          this.rfidService.deviceAddressValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -93,6 +99,7 @@ export class RFIDComponent implements OnInit {
     if (this.isOpenRFIDReader) {
       this.filterTimeValue = await this.rfidService.getDeviceParam(4).toPromise().then((result: any) => {
         if(result) {
+          this.rfidService.filterTimeValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -103,6 +110,7 @@ export class RFIDComponent implements OnInit {
     if (this.isOpenRFIDReader) {
       this.rfPowerValue = await this.rfidService.getDeviceParam(5).toPromise().then((result: any) => {
         if(result) {
+          this.rfidService.rfPowerValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -113,6 +121,7 @@ export class RFIDComponent implements OnInit {
     if (this.isOpenRFIDReader) {
       this.beepEnableValue = await this.rfidService.getDeviceParam(6).toPromise().then((result: any) => {
         if(result) {
+          this.rfidService.beepEnableValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -123,6 +132,7 @@ export class RFIDComponent implements OnInit {
     if (this.isOpenRFIDReader) {
       this.uartBaudRateValue = await this.rfidService.getDeviceParam(7).toPromise().then((result: any) => {
         if(result) {
+          this.rfidService.uartBaudRateValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -138,6 +148,9 @@ export class RFIDComponent implements OnInit {
   }
 
   async updateDeviceParam(form: NgForm) {
+
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
 
     this.isLoading = true;
     this.successMessage = "";
@@ -176,6 +189,10 @@ export class RFIDComponent implements OnInit {
   }
 
   clearFields(form : NgForm){
+
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
     form.reset();
   }
 

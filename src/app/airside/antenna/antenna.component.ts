@@ -15,16 +15,17 @@ export class AntennaComponent implements OnInit {
   }
 
   isLoading = false;
+  isPassiveConfig = false;
 
   isPassiveAntennaOne =  false
   isPassiveAntennaTwo=  false
   isPassiveAntennaThree=  false
   isPassiveAntennaFour =  false
 
-  isActiveAntennaOne=  true
-  isActiveAntennaTwo=  true
-  isActiveAntennaThree=  true
-  isActiveAntennaFour =  true
+  isActiveAntennaOne=  false
+  isActiveAntennaTwo=  false
+  isActiveAntennaThree=  false
+  isActiveAntennaFour =  false
 
   isOpenAntenna = false;
   isPassiveScanning = false;
@@ -48,6 +49,14 @@ export class AntennaComponent implements OnInit {
   ngOnInit(): void {
    this.comPortValue = this.antennaService.getComPortValue();
    this.isOpenAntenna=  this.antennaService.getIsOpenAntenna();
+
+    this.serialNumberValue = this.antennaService.serialNumberValue
+    this.versionInformationValue = this.antennaService.versionInformationValue
+    this.rfPowerValue = this.antennaService.rfPowerValue
+    this.drmValue = this.antennaService.drmValue
+    this.beepStatusValue = this.antennaService.beepStatusValue
+    this.readerTemperatureValue = this.antennaService.readerTemperatureValue
+
   }
 
   getData(){
@@ -67,6 +76,7 @@ export class AntennaComponent implements OnInit {
     if (this.isOpenAntenna) {
       this.serialNumberValue = await this.antennaService.getSerialNumber().toPromise().then((result: any) => {
         if(result) {
+          this.antennaService.serialNumberValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -77,7 +87,7 @@ export class AntennaComponent implements OnInit {
     if (this.isOpenAntenna) {
       this.versionInformationValue = await this.antennaService.getVersionInformation().toPromise().then((result: any) => {
         if(result) {
-          console.log(result.message)
+          this.antennaService.versionInformationValue= result.message
           return result.message
         }
       }, (error : any) => {
@@ -88,6 +98,7 @@ export class AntennaComponent implements OnInit {
     if (this.isOpenAntenna) {
       this.rfPowerValue = await this.antennaService.getRFPower().toPromise().then((result: any) => {
         if(result) {
+          this.antennaService.rfPowerValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -99,6 +110,7 @@ export class AntennaComponent implements OnInit {
     if (this.isOpenAntenna) {
       this.drmValue = await this.antennaService.getDRM().toPromise().then((result: any) => {
         if(result) {
+          this.antennaService.drmValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -110,6 +122,7 @@ export class AntennaComponent implements OnInit {
     if (this.isOpenAntenna) {
       this.beepStatusValue = await this.antennaService.getBeepStatus().toPromise().then((result: any) => {
         if(result) {
+          this.antennaService.beepStatusValue  = result.message
           return result.message
         }
       }, (error : any) => {
@@ -120,6 +133,7 @@ export class AntennaComponent implements OnInit {
     if (this.isOpenAntenna) {
       this.readerTemperatureValue = await this.antennaService.getReaderTemperature().toPromise().then((result: any) => {
         if(result) {
+          this.antennaService.readerTemperatureValue = result.message
           return result.message
         }
       }, (error : any) => {
@@ -148,6 +162,10 @@ export class AntennaComponent implements OnInit {
   }
 
   offAlarm() {
+
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
     this.antennaService.offAlarm().subscribe((data: any) => {
       this.setSuccessMessage(data.message)
       this.isOpenAntenna = true
@@ -158,24 +176,43 @@ export class AntennaComponent implements OnInit {
   }
 
   startPassiveScan(){
-    this.isPassiveScanning = true
-    this.antennaService.startPassiveScan(this.isPassiveAntennaOne, this.isPassiveAntennaTwo , this.isPassiveAntennaThree , this.isPassiveAntennaFour).subscribe()
-    this.setSuccessMessage("Antenna Passive Scan Initiated")
+
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
+    if (!this.isPassiveAntennaOne && !this.isPassiveAntennaTwo && !this.isPassiveAntennaThree && !this.isPassiveAntennaFour) {
+      this.setErrorMessage("Please select at least one antenna!")
+    }else {
+      this.isPassiveScanning = true
+      this.antennaService.startPassiveScan(this.isPassiveAntennaOne, this.isPassiveAntennaTwo, this.isPassiveAntennaThree, this.isPassiveAntennaFour).subscribe()
+      this.setSuccessMessage("Antenna Passive Scan Initiated")
+    }
   }
 
   stopPassiveScan(){
+
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
     this.isPassiveScanning = false
     this.antennaService.stopPassiveScan().subscribe()
     this.setSuccessMessage("Antenna Passive Scan Initiated")
   }
 
   startActiveScan(){
+
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
     this.isActiveScanning = true
     this.antennaService.startActiveScan(this.isActiveAntennaOne, this.isActiveAntennaTwo , this.isActiveAntennaThree , this.isActiveAntennaFour).subscribe()
     this.setSuccessMessage("Antenna Active Scan Initiated")
   }
 
   stopActiveScan(){
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
     this.isActiveScanning = false
     this.antennaService.stopActiveScan().subscribe();
     this.setSuccessMessage("Stop Antenna Active Scan successfully")
@@ -183,12 +220,12 @@ export class AntennaComponent implements OnInit {
 
   connectAntenna(form: NgForm) {
 
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
     if (this.comPortValue === "") {
       this.setErrorMessage("Please insert ComPort value first");
     } else {
-
-      this.clearErrorMessage()
-      this.clearSuccessMessage()
 
       this.isLoading = true;
 
@@ -204,7 +241,6 @@ export class AntennaComponent implements OnInit {
         this.isLoading = false;
       });
     }
-
   }
 
   disconnectAntenna(){
@@ -228,6 +264,9 @@ export class AntennaComponent implements OnInit {
   }
 
   clearFields(form : NgForm){
+    this.clearErrorMessage();
+    this.clearSuccessMessage();
+
     form.reset();
   }
 
