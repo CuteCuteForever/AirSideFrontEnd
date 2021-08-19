@@ -1,0 +1,11 @@
+.font-small {
+  font-size: 15px;
+}
+
+.mat-dialog-title {
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 2px;
+  margin-left: 10px;
+  display: block;
+}

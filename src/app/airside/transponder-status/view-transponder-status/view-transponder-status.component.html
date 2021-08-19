@@ -92,93 +92,52 @@
   <div class="container-fluid">
     <div class="pt-xl-4 pt-md-4 pt-4">
       <table mat-table matTableExporter [dataSource]="dataSource" #exporter="matTableExporter" matSort matSortActive="created" matSortDisableClear matSortDirection="desc">
-        <ng-container matColumnDef="callSign">
-          <tr><th mat-header-cell *matHeaderCellDef> Call Sign </th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.callSign}} </td></tr>
+
+
+        <ng-container matColumnDef="detail">
+          <tr><th mat-header-cell *matHeaderCellDef> Detail </th></tr>
+          <tr> <td mat-cell *matCellDef="let row" style="width:10%">
+            <button mat-icon-button color="primary" (click)="viewDetailDialog(row)" title="editCompany"><mat-icon>info</mat-icon></button>
+          </td> <tr>
         </ng-container>
 
-        <ng-container matColumnDef="serialNumber">
-          <tr><th  mat-header-cell *matHeaderCellDef >Serial Number </th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.serialNumber}} </td></tr>
+        <ng-container matColumnDef="callSign">
+          <tr><th mat-header-cell *matHeaderCellDef> Call Sign </th></tr>
+          <tr><td mat-cell *matCellDef="let element" style="width:5%"> {{element.callSign}} </td></tr>
         </ng-container>
 
         <ng-container matColumnDef="outTimestamp">
           <tr><th  mat-header-cell *matHeaderCellDef >Out Timestamp</th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.outTimestamp}} </td></tr>
+          <tr><td mat-cell *matCellDef="let element" style="width:10%"> {{element.outTimestamp}} </td></tr>
         </ng-container>
 
         <ng-container matColumnDef="inTimestamp">
           <tr><th  mat-header-cell *matHeaderCellDef >In Timestamp</th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.inTimestamp}} </td></tr>
+          <tr><td mat-cell *matCellDef="let element" style="width:10%"> {{element.inTimestamp}} </td></tr>
         </ng-container>
 
         <ng-container matColumnDef="duration">
           <tr><th  mat-header-cell *matHeaderCellDef >Loan Duration</th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.duration}} </td></tr>
+          <tr><td mat-cell *matCellDef="let element" style="width:5%"> {{element.duration}} </td></tr>
         </ng-container>
 
         <ng-container matColumnDef="rentalDuration">
           <tr><th  mat-header-cell *matHeaderCellDef >Rental Duration</th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.rentalDuration}} </td></tr>
+          <tr><td mat-cell *matCellDef="let element" style="width:5%"> {{element.rentalDuration}} </td></tr>
         </ng-container>
 
         <ng-container matColumnDef="transponderStatus">
           <tr><th  mat-header-cell *matHeaderCellDef >Transponder Status </th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.transponderStatus}} </td>
+          <tr><td mat-cell *matCellDef="let element" style="width:5%"> {{element.transponderStatus}} </td>
         </ng-container>
 
         <ng-container matColumnDef="dueNotice">
           <tr><th  mat-header-cell *matHeaderCellDef >Due Notice </th></tr>
-          <tr><td mat-cell *matCellDef="let element" > {{element.dueNotice}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="rowRecordStatus">
-          <tr><th  mat-header-cell *matHeaderCellDef >Row Record Status</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.rowRecordStatus}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="warrantyFromDate">
-          <tr><th  mat-header-cell *matHeaderCellDef >Warranty From Date</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.warrantyFromDate}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="warrantyToDate">
-          <tr><th  mat-header-cell *matHeaderCellDef >Warranty To Date</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.warrantyToDate}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="registrationNumber">
-          <tr><th  mat-header-cell *matHeaderCellDef >Veh. Reg. No.</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.registrationNumber}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="companyName">
-          <tr><th  mat-header-cell *matHeaderCellDef >Company</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.companyName}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="address">
-          <tr><th  mat-header-cell *matHeaderCellDef >Address</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.address}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="contactPersonName">
-          <tr><th  mat-header-cell *matHeaderCellDef >Contact Person</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.contactPersonName}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="contactPersonNumber">
-          <tr><th  mat-header-cell *matHeaderCellDef >Contact Person No.</th> </tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.contactPersonNumber}} </td></tr>
-        </ng-container>
-
-        <ng-container matColumnDef="department">
-          <tr><th  mat-header-cell *matHeaderCellDef >Department </th></tr>
-          <tr><td mat-cell *matCellDef="let element"> {{element.department}} </td></tr>
+          <tr><td mat-cell *matCellDef="let element" style="width:5%"> {{element.dueNotice}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.make-orangered]="row.dueNotice === 'Overdue'" [class.make-greenyellow]="row.dueNotice === 'Due Soon'"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.overdue-color]="row.dueNotice === 'Overdue'" [class.dueSoon-color]="row.dueNotice === 'Due Soon'"></tr>
       </table>
 
       <mat-paginator [pageSizeOptions]="[5, 10, 20]"

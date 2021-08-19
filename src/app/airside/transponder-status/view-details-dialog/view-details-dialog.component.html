@@ -1,0 +1,140 @@
+
+<div class="d-flex align-items-center">
+  <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+    <mat-icon>notes</mat-icon>
+  </button>
+  <h1 mat-dialog-title>
+    {{data.title}}
+  </h1>
+</div>
+
+
+
+<div mat-dialog-content>
+  {{data.message}}
+</div>
+<br/>
+<div class="card">
+  <h5 class="card-header">Company</h5>
+  <div class="card-body">
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Company Name : </label>
+      </div>
+      <div class="col-8">
+        <label class="fst-normal font-small" >{{ transponderStatusModel.companyName}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Address : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.address}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Department : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.department}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Contact Person Name : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.contactPersonName}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Contact Person Number : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.contactPersonNumber}}</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <h5 class="card-header">Vehicle</h5>
+  <div class="card-body">
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Veh. Reg. No. : </label>
+      </div>
+      <div class="col-8">
+        <label class="fst-normal font-small" >{{ transponderStatusModel.registrationNumber}}</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h5 class="card-header">Transponder</h5>
+  <div class="card-body">
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Call Sign : </label>
+      </div>
+      <div class="col-8">
+        <label class="fst-normal font-small" >{{ transponderStatusModel.callSign}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Serial Number : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.serialNumber}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Service Availability : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.serviceAvailability}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Description : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.description}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Warranty Start Date : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.warrantyFromDate}}</label>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-4">
+        <label class="card-text font-small">Warranty Due Date : </label>
+      </div>
+      <div class="col-8">
+        <label class="card-text font-small" >{{ transponderStatusModel.warrantyToDate}}</label>
+      </div>
+    </div>
+  </div>
+</div>
+

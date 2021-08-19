@@ -46,8 +46,6 @@ export class ViewPassiveScanComponent implements OnInit,AfterViewInit  {
   }
 
   ngOnInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
     this.size = this.dataSource.data.length
     this.fieldListener();
   }
@@ -78,6 +76,8 @@ export class ViewPassiveScanComponent implements OnInit,AfterViewInit  {
   }
 
   ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
 

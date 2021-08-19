@@ -7,6 +7,10 @@ import {FormControl} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
 import {TransponderStatusModel} from "./transponder-status.model";
 import {Timestamp} from "rxjs/internal-compatibility";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {UpdateCompanyComponent} from "../../company/update-company/update-company.component";
+import {CompanyModel} from "../../company/view-company/company.model";
+import {ViewDetailsDialogComponent} from "../view-details-dialog/view-details-dialog.component";
 
 @Component({
   selector: 'app-view-transponder-status',
@@ -16,24 +20,15 @@ import {Timestamp} from "rxjs/internal-compatibility";
 export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
 
   displayedColumns: string[] = [
+    'detail',
     'callSign',
     'outTimestamp',
     'inTimestamp',
-    'serialNumber',
+    'transponderStatus',
     'duration',
     'rentalDuration',
-    'transponderStatus',
-    'dueNotice',
-    'rowRecordStatus' ,
-    'warrantyFromDate',
-    'warrantyToDate',
-    'registrationNumber',
-    'companyName',
-    'address',
-    'contactPersonName',
-    'contactPersonNumber',
-    'department'
-    ];
+    'dueNotice'
+  ];
 
   dataSource: MatTableDataSource<TransponderStatusModel>
 
@@ -82,18 +77,22 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     dueNotice : ''
   }
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute ,  private dialog: MatDialog) {
     this.transponderStatusArray = this.route.snapshot.data.viewTransponderStatus;
 
     console.log(this.transponderStatusArray)
+
     this.dataSource = new MatTableDataSource(this.transponderStatusArray);
     this.dataSource.filterPredicate = this.createFilter();
 
     for (let i = 0; i < this.transponderStatusArray.length; i++) {
+
       this.transponderStatusArray[i].outTimestamp = new Date(this.transponderStatusArray[i].outTimestamp).toLocaleString()
       this.transponderStatusArray[i].inTimestamp = new Date(this.transponderStatusArray[i].inTimestamp).toLocaleString()
-    }
 
+      if (this.transponderStatusArray[i].inTimestamp === "1/1/1970, 7:30:00 AM" ){        this.transponderStatusArray[i].inTimestamp = ""
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -148,6 +147,31 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
     )
   }
 
+  viewDetailDialog( transponderStatusModel : TransponderStatusModel){
+
+    console.log("here")
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.data = {
+      title: 'Information',
+      transponderStatusModel : transponderStatusModel
+    };
+
+    dialogConfig.minWidth = 800;
+    dialogConfig.maxHeight = 800;
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+
+    const dialogRef =  this.dialog.open(ViewDetailsDialogComponent, dialogConfig);
+
+    /*   await dialogRef.afterClosed().subscribe((data : CompanyModel) => {
+
+
+       }*/
+
+  }
+
+
   clearFilter() {
     this.callSignFilter.setValue('');
     this.rowRecordStatusFilter.setValue('');
@@ -170,13 +194,13 @@ export class ViewTransponderStatusComponent  implements OnInit,AfterViewInit {
       console.log(transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0)
 
       return transponderStatusModel.callSign.toLowerCase().indexOf(searchTerms.callSign.toLowerCase()) !== -1
-      && transponderStatusModel.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0
-      && transponderStatusModel.dueNotice.toLowerCase().indexOf(searchTerms.dueNotice.toLowerCase()) == 0
+        && transponderStatusModel.rowRecordStatus.toLowerCase().indexOf(searchTerms.rowRecordStatus.toLowerCase()) === 0
+        && transponderStatusModel.dueNotice.toLowerCase().indexOf(searchTerms.dueNotice.toLowerCase()) == 0
         && transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
-      && transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0
+        && transponderStatusModel.rentalDuration.toLowerCase().indexOf(searchTerms.rentalDuration.toLowerCase()) === 0
 
       //&& transponderStatusModel.transponderStatus.toLowerCase().indexOf(searchTerms.transponderStatus.toLowerCase()) === 0
-     //  ;
+      //  ;
     }
     return filterFunction;
   }
